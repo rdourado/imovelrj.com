@@ -1,0 +1,625 @@
+@import "compass"
+@import "compass/layout"
+@import url("http://fonts.googleapis.com/css?family=Roboto")
+
+// Variables
+
+$speed: .3s
+$ease: ease-out
+$fluid: false
+
+$green-light: #e7ecbc
+$green: #2f977c
+$green-dark: #167146
+$gray: #4f4f51
+
+$columns: 12
+$gutter: 10px
+$max-width: 960px
+
+$roboto: "Roboto", sans-serif
+$iconfont: "imovelrj"
+
++font-face("imovelrj", font-files("imovelrj.woff", "imovelrj.ttf", "imovelrj.svg"), "imovelrj.eot", normal, normal)
+
+// Methods
+
+$sprites: sprite-map("sprites/*.png", $layout: smart)
+$retina: sprite-map("retina/*.png", $layout: smart)
+
+@mixin use-sprite($sprite)
+	background-image: sprite-url($sprites)
+	background-position: sprite-position($sprites, $sprite)
+	height: image-height(sprite-file($sprites, $sprite))
+	width: image-width(sprite-file($sprites, $sprite))
+
+	@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi)
+		background-image: sprite-url($retina)
+		background-size: (image-width(sprite-path($retina)) / 2) (image-height(sprite-path($retina)) / 2)
+		background-position: round(nth(sprite-position($retina, $sprite), 1) / 2) round(nth(sprite-position($retina, $sprite), 2) / 2)
+		height: image-height(sprite-file($retina, $sprite)) / 2
+		width: image-width(sprite-file($retina, $sprite)) / 2
+@function get-height($sprite)
+	@return image-height(sprite-file($sprites, $sprite))
+@function get-width($sprite)
+	@return image-width(sprite-file($sprites, $sprite))
+
+@function col($number: 1, $parent: $columns)
+	@return (100% / $parent * $number)
+@function gutter($parent: $columns)
+	@return percentage($gutter / ($max-width * $parent / $columns))
+
+=col($number: 1, $parent: $columns)
+	padding-left: gutter($parent)
+	padding-right: gutter($parent)
+	width: col($number, $parent)
+
+// Reset
+
+*
+	border: 0 none
+	margin: 0
+	padding: 0
+	+box-sizing(border-box)
+body
+	font: 14px/22px sans-serif
+	-webkit-font-smoothing: antialiased
+	-moz-osx-font-smoothing: grayscale
+	-webkit-text-size-adjust: 100%
+hr
+	display: none
+ul, ol
+	list-style: none
+img
+	height: auto
+	max-width: 100%
+	vertical-align: baseline
+a
+	color: $green
+	text-decoration: none
+
+//
+
+.icon:before
+	font-family: $iconfont !important
+	font-style: normal !important
+	font-weight: normal !important
+	font-variant: normal !important
+	text-transform: none !important
+	speak: none
+	line-height: 1
+
+.icon-gplus:before
+	content: "g"
+.icon-youtube:before
+	content: "y"
+.icon-facebook:before
+	content: "f"
+.icon-twitter:before
+	content: "t"
+.icon-linkedin:before
+	content: "n"
+.icon-instagram:before
+	content: "i"
+.icon-eye:before
+	content: "e"
+.icon-search:before
+	content: "s"
+
+//
+
+.wrap
+	height: 100%
+	margin: 0 auto
+	max-width: $max-width
+	position: relative
+	+pie-clearfix
+
+// Header
+
+.head
+	background-position: center center
+	+background-size(cover)
+	border-bottom: 8px solid $green
+	margin-bottom: 60px
+	&:before
+		background: rgba(#fff,.8)
+		content: ""
+		display: block
+		height: 150px
+		+stretch-x
+	.home &
+		height: 790px
+.head-logo
+	height: 150px
+	position: relative
+.logo
+	left: 50%
+	margin: (get-height("logo") / -2 - 4) 0 0 (get-width("logo") / -2)
+	position: absolute
+	top: 50%
+	+hide-text("right")
+	+use-sprite("logo")
+.head-navigation
+	left: gutter()
+	position: absolute
+	top: 60px
+.head-toggle
+	background: none
+	cursor: pointer
+	width: 32px
+	span
+		background: $green
+		border-radius: 1px
+		display: block
+		height: 7px
+		+ span
+			margin-top: 4px
+.head-nav
+	background: #fff
+	border-radius: 5px
+	font: 14px/30px $roboto
+	left: 0
+	margin-top: -10px
+	opacity: 0
+	padding: 10px 0
+	position: absolute
+	top: 105%
+	visibility: hidden
+	width: 200px
+	+transition(opacity $speed $ease, margin $speed $ease, visibility $speed $ease)
+	&.active
+		margin-top: 0
+		opacity: 1
+		visibility: visible
+	strong
+		border-left: 1px solid $green
+		color: $green
+		display: block
+		font: inherit
+		padding: 0 19px 0 18px
+	li
+		display: inline
+	a
+		color: $gray
+		display: block
+		padding: 0 19px
+		+single-transition(background, $speed, $ease)
+		&:hover, &:focus, &:active
+			background: tint($green,80%)
+.head-social
+	font-size: 0
+	position: absolute
+	right: gutter()
+	top: 59px
+	li
+		display: inline
+	a
+		border: 1px solid #000
+		border-radius: 50%
+		color: #fff
+		display: inline-block
+		font-size: 20px
+		height: 32px
+		margin-left: 5px
+		padding-top: 6px
+		text-align: center
+		width: 32px
+		+transition(background $speed $ease, color $speed $ease)
+	.facebook a
+		background: #3a589b
+		border-color: #3a589b
+		&:hover, &:focus, &:active
+			background: #fff
+			color: #3a589b
+	.twitter a
+		background: #598dca
+		border-color: #598dca
+		&:hover, &:focus, &:active
+			background: #fff
+			color: #598dca
+	.gplus a
+		background: #ca4638
+		border-color: #ca4638
+		&:hover, &:focus, &:active
+			background: #fff
+			color: #ca4638
+	.linkedin a
+		background: #0077b5
+		border-color: #0077b5
+		&:hover, &:focus, &:active
+			background: #fff
+			color: #0077b5
+	.youtube a
+		background: #ca4638
+		border-color: #ca4638
+		&:hover, &:focus, &:active
+			background: #fff
+			color: #ca4638
+	.instagram a
+		background: #517fa6
+		border-color: #517fa6
+		&:hover, &:focus, &:active
+			background: #fff
+			color: #517fa6
+.head-search
+	margin: 240px auto 0
+	text-align: center
+	+col(10)
+	legend
+		color: #fff
+		display: block
+		font: 32px/1.5 $roboto
+		+text-shadow(0 2px 2px 0 rgba(#000,.9))
+	label
+		display: none
+.head-field
+	background: rgba(#fff,.5)
+	border-radius: 10px
+	display: table
+	margin-bottom: 5px
+	padding: 12px
+	width: 100%
+	&:before
+		color: $green
+		content: "s"
+		display: block
+		font: 12px $iconfont
+		margin: 13px 0 0 15px
+		position: absolute
+.head-input
+	border: 1px solid shade(#fff,20%)
+	border-radius: 8px 0 0 8px
+	display: table-cell
+	font: 14px sans-serif
+	height: 40px
+	padding: 12px 10px 12px 37px
+	width: col(9,10)
+.head-submit
+	background: $green
+	border: 1px solid tint($green,20%)
+	border-radius: 0 8px 8px 0
+	color: #fff
+	cursor: pointer
+	display: table-cell
+	font: 14px sans-serif
+	padding: 11px 5px
+	width: col(1,10)
+.head-advanced
+	color: #fff
+	float: right
+	font: 14px sans-serif
+	margin-right: col(1,10) + gutter(10)
+	+single-transition(color, $speed)
+	+text-shadow(0 2px 2px 0 rgba(#000,.9))
+	&:hover, &:focus, &:active
+		color: $green-light
+
+// Footer
+
+.foot-more
+	background: #167146 generated-image-url("texture-2.png") center bottom no-repeat
+	padding: 60px 0
+.foot-sales
+	float: left
+	position: relative
+	+col(4)
+	.foot-title
+		background: rgba(#fff,.8)
+		color: $green-dark
+		float: left
+		margin: 20px 60px 0 0
+		padding: 8px 10px
+		position: absolute
+		right: auto
+		text-transform: uppercase
+	img
+		height: auto
+		width: 100%
+.foot-tags
+	float: right
+	font-family: $roboto
+	+col(7)
+	a
+		border-bottom: 1px solid #fff
+		color: #fff
+		margin-right: 10px
+		+transition(border $speed, color $speed)
+		&:hover, &:focus, &:active
+			border-color: transparent
+			color: $green-light
+.foot-title
+	color: #fff
+	font: 20px $roboto
+	margin-bottom: 10px
+	p + &
+		margin-top: 20px
+	.icon
+		color: $green-light
+		font-size: 13px
+		margin: 6px 0 0 ($gutter * -2 - 12)
+		position: absolute
+.foot-footer
+	background: #fff
+	clear: both
+	color: $green-dark
+	font: 10px/1.3 sans-serif
+	padding: 30px 0
+	+clearfix
+.foot-copyright
+	float: left
+	+col(9)
+.foot-developer
+	float: right
+	padding-top: 3px
+	text-align: right
+	+col(3)
+
+// Home / Primary
+
+.main-feature
+	float: left
+	margin-bottom: 60px
+	+col(6)
+	img
+		display: block
+		margin-bottom: 10px
+		width: 100%
+.feat-title
+	background: rgba($green,.8)
+	color: #fff
+	display: inline-block
+	font: 24px/38px sans-serif
+	margin-top: 24px
+	padding: 0 10px
+	position: absolute
+
+// Home / Secondary
+
+.main-secondary
+	background: #cce09f generated-image-url("texture-1.jpg") center center
+	+background-size(cover)
+	padding: 60px 0
+.blog-features,
+.blog-posts
+	float: left
+	+col(4)
+.blog-posts
+	li + li
+		border-top: 1px solid $green-dark
+	a
+		display: block
+		color: $green-dark
+		font: 16px/18px $roboto
+		padding: 16px 24px
+		position: relative
+		+single-transition(background, $speed, $ease)
+		&:before
+			border: 1px solid $green
+			border-bottom-color: transparent
+			border-left-color: transparent
+			content: ""
+			display: block
+			height: 5px
+			left: -2px
+			position: absolute
+			top: 22px
+			width: 5px
+			+rotate(45deg)
+			+single-transition(left, $speed, $ease)
+		&:hover, &:focus, &:active
+			background: $green-light
+			&:before
+				left: 10px
+.blog-primary
+	.blog-title
+		background: rgba(#fff,.8)
+		color: $green-dark
+		font: 20px/38px $roboto
+		margin-top: 20px
+		padding: 0 10px
+		position: absolute
+		text-transform: uppercase
+	img
+		display: block
+		margin-bottom: 33px
+		width: 100%
+.blog-secondary
+	font: normal 16px/22px $roboto
+	.blog-title
+		font: inherit
+	a
+		color: $green-dark
+	img
+		float: left
+		margin-right: 13px
+
+//
+// Tablet / Horizontal
+//
+
+@media screen and (max-width : $max-width), screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape)
+	$columns: 10
+	$max-width: $max-width / 12 * $columns
+
+	@if $fluid == false
+		.wrap
+			max-width: $max-width
+
+	.head
+		.home &
+			height: 675px
+			margin-bottom: 230px
+	.head-logo,
+	.head:before
+		height: 70px
+	.head-navigation
+		left: gutter($columns)
+	.logo
+		left: col(1,$columns) + gutter($columns)
+		margin: (get-height("pin") / -2) 0 0
+		+use-sprite("pin")
+	.head-navigation
+		left: gutter($columns)
+		top: 20px
+	.head-social
+		right: gutter($columns)
+		top: 19px
+	.head-search
+		+col(8,$columns)
+		legend
+			color: $green
+			+text-shadow(none)
+		.home &
+			margin-top: 645px
+	.head-input
+		width: col(7,$columns - 2)
+	.head-submit
+		width: col(1,$columns - 2)
+	.head-advanced
+		color: $green
+		margin-right: col(1,$columns - 2) + gutter($columns - 2)
+		+text-shadow(none)
+
+	.foot-sales
+		+col(3,$columns)
+		.foot-title
+			margin-right: 30px
+	.foot-tags
+		+col(6,$columns)
+	.foot-copyright
+		+col(8,$columns)
+	.foot-developer
+		+col(2,$columns)
+	.foot-title
+		font-size: 18px
+
+	.main-feature
+		+col(5,$columns)
+	.feat-title
+		font-size: 22px
+
+	.blog-features
+		+col(4,$columns)
+	.blog-posts
+		+col(3,$columns)
+		a
+			font-size: 15px
+			padding: 14px 22px
+			&:before
+				margin-top: -2px
+				margin-left: -1px
+
+//
+// Tablet / Vertical
+//
+
+@media screen and (max-width : $max-width / 12 * 10), screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : portrait)
+	$columns: 6
+	$max-width: $max-width / 12 * $columns
+
+	@if $fluid == false
+		.wrap
+			max-width: $max-width
+
+	.head
+		.home &
+			height: 440px
+	.head-navigation
+		left: gutter($columns)
+	.logo
+		left: col(1,$columns) + gutter($columns)
+	.head-social
+		right: gutter($columns)
+	.head-search
+		+col($columns,$columns)
+		legend
+			font-size: 22px
+		.home &
+			margin-top: 415px
+	.head-field
+		padding-left: 0
+		padding-right: 0
+	.head-input
+		width: col(5,$columns)
+	.head-submit
+		width: col(1,$columns)
+	.head-advanced
+		margin-right: col(1,$columns)
+
+	.foot-more
+		+background-size(cover)
+	.foot-copyright,
+	.foot-developer
+		padding: 20px 0
+		text-align: center
+		+col($columns,$columns)
+		img
+			display: inline
+	.foot-sales,
+	.foot-tags
+		+col($columns,$columns)
+	.foot-sales
+		margin-bottom: 60px
+		.foot-title
+			margin-right: 50%
+	.foot-title
+		.icon
+			margin: 0 ($gutter * 2) 0 0
+			position: static
+
+	.main-feature,
+	.blog-features,
+	.blog-posts
+		+col($columns,$columns)
+	.blog-features
+		margin-bottom: 30px
+	.blog-posts + .blog-posts li
+		border-top: 1px solid $green-dark
+
+//
+// iPhone
+//
+
+@media screen and (max-width : $max-width / 12 * 6), screen and (min-device-width : 320px) and (max-device-width : 568px) and (orientation : portrait)
+	$columns: 4
+	$max-width: $max-width / 12 * $columns
+
+	@if $fluid == false
+		.wrap
+			max-width: $max-width
+
+	.head
+		.home &
+			margin-bottom: 250px
+	.head-navigation
+		left: gutter($columns)
+	.logo
+		left: col(1,$columns) + gutter($columns)
+	.head-social
+		left: 0
+		right: 0
+		text-align: center
+		top: 475px
+	.head-search
+		+col($columns,$columns)
+		.home &
+			margin-top: 465px
+	.head-input
+		width: col(3,$columns)
+	.head-submit
+		width: col(1,$columns)
+	.head-advanced
+		margin-right: 0
+
+	.foot-copyright,
+	.foot-developer,
+	.foot-sales,
+	.foot-tags,
+	.main-feature,
+	.blog-features,
+	.blog-posts
+		+col($columns,$columns)
+	.foot-sales
+		.foot-title
+			margin-right: col(1,$columns)

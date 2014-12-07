@@ -1,0 +1,139 @@
+﻿!!!
+%html{:lang => "pt-br"}
+	%head
+		%meta{:charset => "UTF-8"}/
+		%title Imóvel RJ
+		/ %meta{:name => "viewport", :content => "width=device-width"}/
+		%meta{:name => "viewport", :content => "width=device-width, initial-scale=1"}/
+		%link{:rel => "stylesheet", :href => "css/screen.css", :media => "screen, projection"}/
+	%body.home
+		%header.head{:role => "banner", :style => "background-image:url(img/ap.jpg)"}
+			.wrap
+				.head-logo
+					%h1.logo<
+						%a{:href => "#"} ImóvelRJ
+				.head-navigation#nav{:role => "navigation"}
+					%button.head-toggle{:type => "button"}
+						- 3.times do |n|
+							%span
+					%nav.head-nav
+						%strong Menu de Navegação
+						%ul.head-menu
+							%li.menu-item<
+								%a{:href => "#"} Lançamentos
+							%li.menu-item<
+								%a{:href => "#"} Prontos para morar
+							%li.menu-item<
+								%a{:href => "#"} Comercial
+							%li.menu-item<
+								%a{:href => "#"} Casas na Barra da Tijuca
+				.head-social
+					%ul.head-links
+						%li.head-link.facebook<
+							%a{:href => "#"}<
+								%i.icon.icon-facebook
+						%li.head-link.twitter<
+							%a{:href => "#"}<
+								%i.icon.icon-twitter
+						%li.head-link.gplus<
+							%a{:href => "#"}<
+								%i.icon.icon-gplus
+						%li.head-link.linkedin<
+							%a{:href => "#"}<
+								%i.icon.icon-linkedin
+						%li.head-link.youtube<
+							%a{:href => "#"}<
+								%i.icon.icon-youtube
+						%li.head-link.instagram<
+							%a{:href => "#"}<
+								%i.icon.icon-instagram
+				%form.head-search{:action => "", :method => "get"}
+					%fieldset
+						%legend O melhor atendimento por m²
+						%label{:for => "s"} Busque o imóvel dos seus sonhos
+						%p.head-field
+							%input.head-input#s{:type => "text", :name => "", :required => true, :placeholder => "Busque o imóvel dos seus sonhos"}/
+							%button.head-submit{:type => "submit"} Ok
+						%a.head-advanced{:href => "#"} Faça uma busca avançada aqui
+		%hr/
+		%main.main{:role => "main"}
+			.main-primary
+				.wrap
+					%section.main-feature
+						%a{:href => "#"}
+							%h2.feat-title Lançamentos
+							%img.feat-image{:src => "http://dummyimage.com/460x346", :alt => ""}/
+						%p<
+							%strong Aqui você encontrará os melhores lançamentos em imóveis.
+							%br>
+							Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies.
+					%section.main-feature
+						%a{:href => "#"}
+							%h2.feat-title Prontos para morar
+							%img.feat-image{:src => "http://dummyimage.com/460x346", :alt => ""}/
+						%p<
+							%strong Escolha o imóvel dos seus sonhos e mude para lá agora!
+							%br>
+							Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies.
+			%hr/
+			.main-secondary
+				.wrap
+					.blog-features
+						.blog-primary
+							%a{:href => "#"}
+								%h3.blog-title Blog Planta Baixa
+								%img{:src => "http://dummyimage.com/300x226", :alt => ""}/
+						.blog-secondary
+							%a{:href => "#"}
+								%img{:src => "http://dummyimage.com/80x80", :alt => ""}/
+								%h3.blog-title As melhores dicas de quem possui experiência em mais de 200 imóveis negociados
+					%ul.blog-posts
+						%li.blog-post<
+							%a{:href => "#"} Contrary to popular belief, Lorem Ipsum is not simply random text.
+						%li.blog-post<
+							%a{:href => "#"} It has roots in a piece of classical Latin literature from 45 BC.
+						%li.blog-post<
+							%a{:href => "#"} Making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia.
+						%li.blog-post<
+							%a{:href => "#"} Looked up one of the more obscure Latin words.
+					%ul.blog-posts
+						%li.blog-post<
+							%a{:href => "#"} There are many variations of passages of Lorem Ipsum available.
+						%li.blog-post<
+							%a{:href => "#"} But the majority have suffered alteration in some form, by injected humour, or randomised words which.
+						%li.blog-post<
+							%a{:href => "#"} Don't look even slightly believable. If you are going to use a passage of Lorem Ipsum.
+						%li.blog-post<
+							%a{:href => "#"} You need to be sure there isn't anything embarrassing hidden in the middle of text.
+		%hr/
+		%footer.foot{:role => "contentinfo"}
+			.foot-more
+				.wrap
+					.foot-sales
+						%a{:href => "#"}<
+							%h3.foot-title Venda e avalie seu imóvel conosco
+							%img{:src => "http://dummyimage.com/300x226", :alt => ""}/
+					.foot-tags
+						%h4.foot-title<
+							%i.icon.icon-eye>
+							Imóveis mais acessados
+						%p
+							- ["Soft Inn Rio Business Hotel", "On The Park", "Gran Residencial Clube Cachambi", "Blue Houses", "Mansões da Barra da Tijuca", "Luau do Recreio", "B.Side", "Aquarela Carioca", "Rivieras D’Florença", "Assembleia One", "Place Verte", "Península Life", "Del Lago", "Alameda dos Eucalíptos", "Residencial Meridiano Arpoador", "Alphagreen", "Holiday Inn Porto Maravilha", "Riserva Golf", "Saint Barth", "Blue Houses", "Bora Bora", "Santa Marina"].each do |a|
+								%a{:href => "#"} #{a}
+						%h4.foot-title<
+							%i.icon.icon-search>
+							Bairros mais procurados
+						%p
+							- ["Barra da Tijuca", "Recreio dos Bandeirantes", "Península", "Jacarepaguá", "Porto Maravilha", "Botafogo", "Ipanema", "São Conrado", "Leblon", "Centro", "Copacabana", "Laranjeiras", "Tijuca", "Méier", "Cidade Jardim", "Flamengo", "Humaitá", "Lagoa"].each do |a|
+								%a{:href => "#"} #{a}
+			%hr/
+			.foot-footer
+				.wrap
+					%p.foot-copyright<
+						Imóvel RJ é marca em registro de propriedade da ICI Negócios Imobiliários CNPJ nº 14.717.017/0001-79 - Creci Jurídico nº 5361
+						%br>
+						Todos os Direitos Reservados | Avenida das Américas 333, sala 1207 Barra da Tijuca, Rio de Janeiro - CEP 22631-003 | (21) 9 7960-7278
+					%a.foot-developer{:href => "http://cristianoweb.com.br/", :target => "_blank"}<
+						%img{:src => "img/cristianoweb.png", :alt => "@cristianoweb"}/
+		%script{:src => "http://code.jquery.com/jquery-1.11.0.min.js"}
+		%script{:src => "js/app.js"}
