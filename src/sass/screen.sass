@@ -62,6 +62,10 @@ $retina: sprite-map("retina/*.png", $layout: smart)
 	padding-left: gutter($parent)
 	padding-right: gutter($parent)
 	width: col($number, $parent)
+// =wrap($parent: $columns)
+// 	$value: percentage($gutter / (($max-width * $parent / $columns) - $gutter * 2)) * -1
+// 	margin-left: $value
+// 	margin-right: $value
 
 // Reset
 
@@ -130,6 +134,9 @@ a
 	margin: 0 auto
 	max-width: $max-width
 	position: relative
+	.wrap
+		margin-left: $gutter * -1
+		margin-right: $gutter * -1
 
 .cols
 	+stretch
@@ -159,12 +166,43 @@ a
 			&:nth-child(n+5)
 				display: none
 
+.horizontal-only,
+.vertical-only,
+.mobile-only
+	display: none
+.desktop-only
+	display: block
+@media screen and (max-width : $max-desktop), screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape)
+	.desktop-only,
+	.vertical-only,
+	.mobile-only
+		display: none
+	.horizontal-only
+		display: block
+@media screen and (max-width : $max-horizontal), screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : portrait)
+	.desktop-only,
+	.horizontal-only,
+	.mobile-only
+		display: none
+	.vertical-only
+		display: block
+@media screen and (max-width : $max-vertical), screen and (min-device-width : 320px) and (max-device-width : 568px) and (orientation : portrait)
+	.desktop-only,
+	.horizontal-only,
+	.vertical-only
+		display: none
+	.mobile-only
+		display: block
+
 .header
 	color: $green
 	font: bold 18px/24px sans-serif
 	margin-bottom: 24px
 	&.orange
 		color: $orange
+	&.simple
+		color: $gray
+		font-weight: normal
 
 .button
 	background: $green-dark
@@ -187,6 +225,7 @@ a
 	display: inline-block
 	font: 12px/30px sans-serif
 	padding: 0 15px
+	text-align: center
 	+box-shadow(0 2px 3px 0 rgba(#000,.2))
 	.icon
 		display: inline-block
@@ -230,23 +269,10 @@ a
 .content
 	p, ul, ol
 		margin-bottom: 24px
-	ul, ol
-		padding-left: ($gutter * 2)
-	ol
-		counter-reset: i
-	li
-		position: relative
-	ul li:before,
-	ol li:before
-		content: "∗"
-		font: inherit
-		display: block
-		left: $gutter * -2
-		position: absolute
-		text-indent: 6px
-		top: 0
-	ol li:before
-		content: counter(i)
+	ul li
+		list-style: circle inside
+	ol li
+		list-style: decimal inside
 	h1, h2, h3, h4, h5, h6
 		color: $green
 		font: bold 18px/24px sans-serif
@@ -254,17 +280,11 @@ a
 		&:first-child
 			margin-top: 0
 	.two
-		@extend .cf
-		float: left
-		width: (100% / 2)
+		+column-count(2)
 	.three
-		@extend .cf
-		float: left
-		width: (100% / 3)
+		+column-count(3)
 	.four
-		@extend .cf
-		float: left
-		width: (100% / 4)
+		+column-count(4)
 
 // Header
 
@@ -660,8 +680,8 @@ a
 	+col(8)
 
 .gallery
-	margin: 0 ($gutter * -1) 24px
-	+pie-clearfix
+	@extend .cf
+	margin-bottom: 24px
 	img
 		display: block
 		height: auto
@@ -688,7 +708,11 @@ a
 	margin-bottom: 30px
 	img
 		float: left
+		height: 80px
 		margin: 0 ($gutter * 2) ($gutter * 2) 0
+		width: 80px
+	p, ul, ol
+		margin-left: 100px
 
 .nav-tabs
 	@extend .cf
@@ -714,11 +738,11 @@ a
 .entry-share
 	float: left
 	margin-bottom: 35px
-	width: col(9)
+	+col(9)
 .entry-evaluate
 	float: right
 	margin-bottom: 35px
-	width: col(3)
+	+col(3)
 
 .entry-comments
 	border-top: 1px solid $green-light
@@ -761,7 +785,7 @@ a
 	@extend .cf
 	clear: both
 	margin-bottom: 24px
-.widget-title
+.widget_title
 	color: $green
 	display: block
 	font: bold 18px sans-serif
@@ -885,6 +909,40 @@ a
 				margin-top: -2px
 				margin-left: -1px
 
+	.entry-id,
+	.entry-body
+		+col(7,$columns)
+	.entry-value,
+	.entry-side
+		+col(3,$columns)
+	.entry-meta
+		+col(10,$columns)
+	.entry-foot
+		margin-left: gutter($columns)
+		margin-right: gutter($columns)
+	.entry-share,
+	.entry-evaluate
+		width: col($columns,$columns)
+	.entry-comments
+		margin-left: gutter($columns)
+		margin-right: gutter($columns)
+		padding-right: col(1,$columns)
+	.entry-related
+		.header
+			+col($columns,$columns)
+		&:after
+			margin-left: gutter($columns)
+			margin-right: gutter($columns)
+	.related-item
+		+col(2,$columns)
+		&:nth-child(n+6)
+			display: none
+	.gallery-view
+		+col(7,7)
+	.gallery-thumb
+		padding: 0 $gutter
+		width: (100% / 4)
+
 //
 // Tablet / Vertical
 //
@@ -968,6 +1026,74 @@ a
 	.blog-posts + .blog-posts li
 		border-top: 1px solid $green-dark
 
+	.entry-id,
+	.entry-value,
+	.entry-body,
+	.entry-side
+		+col($columns,$columns)
+	.entry-meta
+		display: block
+		+clearfix
+		+col($columns,$columns)
+		li
+			display: block
+			float: left
+			margin-bottom: 10px
+			margin-right: $gutter * 4
+	.entry-foot
+		margin-left: gutter($columns)
+		margin-right: gutter($columns)
+		.entry-side
+			padding-left: 0
+			padding-right: 0
+	.entry-share
+		+col(4,$columns)
+	.entry-evaluate
+		+col(2,$columns)
+	.entry-comments
+		margin-left: gutter($columns)
+		margin-right: gutter($columns)
+		padding-left: 0
+		padding-right: 0
+	.entry-related
+		.header
+			+col($columns,$columns)
+		&:after
+			margin-left: gutter($columns)
+			margin-right: gutter($columns)
+	.related-item
+		+col(2,$columns)
+		&:nth-child(n+4)
+			display: none
+
+	.gallery a
+		display: block
+		margin: 0 0 15px
+		padding: 0
+		width: 100%
+	.content
+		.three, .four
+			+column-count(2)
+	.share
+		height: 30px
+		overflow: hidden
+		padding: 0
+		width: 30px
+		.icon
+			margin: 0
+
+	.widget_text
+		float: left
+		padding-right: $gutter
+		width: 50%
+	.widget_neighbor
+		clear: none
+		float: right
+		padding-left: $gutter
+		width: 50%
+		li:nth-child(n+3)
+			display: none
+
 //
 // iPhone
 //
@@ -991,8 +1117,9 @@ a
 		left: 0
 		right: 0
 		text-align: center
-		top: 475px
+		top: 360px
 	.head-search
+		margin-top: 340px
 		+col($columns,$columns)
 		.home &
 			margin-top: 465px
@@ -1002,6 +1129,7 @@ a
 		width: col(1,$columns)
 	.head-advanced
 		margin-right: 0
+		width: auto
 
 	.foot-copyright,
 	.foot-sales,
@@ -1013,3 +1141,44 @@ a
 	.foot-sales
 		.foot-title
 			margin-right: col(1,$columns)
+
+	.entry-id,
+	.entry-value,
+	.entry-body,
+	.entry-side,
+	.entry-meta
+		+col($columns,$columns)
+	.entry-foot
+		margin-left: gutter($columns)
+		margin-right: gutter($columns)
+	.entry-share,
+	.entry-evaluate
+		+col($columns,$columns)
+	.entry-comments
+		margin-left: gutter($columns)
+		margin-right: gutter($columns)
+	.entry-related
+		.header
+			+col($columns,$columns)
+		&:after
+			margin-left: gutter($columns)
+			margin-right: gutter($columns)
+	.related-item
+		+col(2,$columns)
+		&:nth-child(n+3)
+			display: none
+
+	.content
+		.two, .three, .four
+			+column-count(1)
+
+	.widget_text
+		float: none
+		padding-right: 0
+		width: 100%
+	.widget_neighbor
+		float: none
+		padding-left: 0
+		width: (100% / 4 * 3)
+		li:nth-child(n+3)
+			display: none

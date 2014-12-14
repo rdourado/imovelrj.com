@@ -1,0 +1,27 @@
+﻿%aside.widget.widget_contact
+	%form.form-contact{:action => "", :method => "post"}
+		%fieldset
+			%legend.widget_title Dúvidas? Fale Conosco!
+			%p.field
+				%input#name{:type => "text", :name => "", :placeholder => "Nome:", :required => true, :aria => {:required => "true", :label => "Nome"}}/
+			%p.field
+				%input#phone{:type => "text", :name => "", :placeholder => "Telefone:", :required => true, :aria => {:required => "true", :label => "Telefone"}}/
+			%p.field
+				%input#email{:type => "text", :name => "", :placeholder => "E-mail:", :required => true, :aria => {:required => "true", :label => "E-mail"}}/
+			%p.field
+				%textarea#msg{:name => "", :cols => "30", :rows => "8", :placeholder => "Mensagem ou dúvida:", :required => true, :aria => {:required => "true", :label => "Mensagem ou dúvida"}}
+			%p.submit
+				%button.button{:type => "submit"} Enviar
+%aside.widget.widget_text
+	%p<
+		%a{:href => "#"}<
+			%img.rounded{:src => "http://dummyimage.com/300x200", :alt => "", :width => "300", :height => "200"}/
+%aside.widget.widget_neighbor
+	%h2.widget_title Casas vizinhas
+	%ul.neighbor-list
+		- 4.times do |n|
+			%li.neighbor-item<
+				%a{:href => "#"}
+					%img.neighbor-image{:src => "http://dummyimage.com/60x60", :alt => "", :width => "60", :height => "60"}/
+					%h3.neighbor-title Lorem Ipsum is simply dummy text
+					%strong.neighbor-value R$ 9.999.999,99

@@ -43,7 +43,7 @@
 								Vagas na garagem:
 								%strong 2 até 16 vagas
 					.entry-body.content.e-content
-						.gallery
+						.gallery.wrap
 							%a.gallery-view{:href => "#"}<
 								%img{:src => "http://dummyimage.com/620x486", :alt => "", :width => "620", :height => "486"}/
 							- 4.times do |n|
@@ -61,7 +61,6 @@
 							%li Text ever since the 1500s
 							%li When an unknown
 							%li Printer took a galley
-						%ul.three
 							%li Dummy text of the printing
 							%li And typesetting industry
 							%li Lorem Ipsum has
@@ -71,7 +70,6 @@
 							%li When an unknown
 							%li Printer took a galley
 							%li Of type and scrambled
-						%ul.three
 							%li Lorem Ipsum is simply
 							%li Dummy text of the printing
 							%li And typesetting industry
@@ -81,34 +79,8 @@
 							%li Text ever since the 1500s
 							%li When an unknown
 							%li Printer took a galley
-					.entry-side
-						%aside.widget.widget-contact
-							%form.form-contact{:action => "", :method => "post"}
-								%fieldset
-									%legend.widget-title Dúvidas? Fale Conosco!
-									%p.field
-										%input#name{:type => "text", :name => "", :placeholder => "Nome:", :required => true, :aria => {:required => "true", :label => "Nome"}}/
-									%p.field
-										%input#phone{:type => "text", :name => "", :placeholder => "Telefone:", :required => true, :aria => {:required => "true", :label => "Telefone"}}/
-									%p.field
-										%input#email{:type => "text", :name => "", :placeholder => "E-mail:", :required => true, :aria => {:required => "true", :label => "E-mail"}}/
-									%p.field
-										%textarea#msg{:name => "", :cols => "30", :rows => "8", :placeholder => "Mensagem ou dúvida:", :required => true, :aria => {:required => "true", :label => "Mensagem ou dúvida"}}
-									%p.submit
-										%button.button{:type => "submit"} Enviar
-						%aside.widget.widget-text
-							%p<
-								%a{:href => "#"}<
-									%img.rounded{:src => "http://dummyimage.com/300x200", :alt => "", :width => "300", :height => "200"}/
-						%aside.widget.widget-neighbor
-							%h2.widget-title Casas vizinhas
-							%ul.neighbor-list
-								- 4.times do |n|
-									%li.neighbor-item<
-										%a{:href => "#"}
-											%img.neighbor-image{:src => "http://dummyimage.com/60x60", :alt => "", :width => "60", :height => "60"}/
-											%h3.neighbor-title Lorem Ipsum is simply dummy text
-											%strong.neighbor-value R$ 9.999.999,99
+					.entry-side.desktop-only.horizontal-only
+						= Haml::Engine.new(File.read(File.dirname(__FILE__) + "/_sidebar.haml")).render
 					%footer.entry-foot
 						.entry-author
 							%h2.header Dicas do corretor
@@ -131,28 +103,31 @@
 								%p Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Lorem Ipsum is simply dummy text of the printing and typesetting industry.
 							.tab-pane#tab3{:role => "tabpanel"}
 								%p Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-						.entry-share
-							%h3.header Gostou desse imóvel? Compartilhe com os seus amigos!
-							%a.share.email{:href => "#"}<
-								%i.icon.icon-email
-								Envie para um amigo
-							%a.share.twitter{:href => "#"}<
-								%i.icon.icon-twitter
-								Twitter
-							%a.share.facebook{:href => "#"}<
-								%i.icon.icon-facebook
-								Facebook
-							%a.share.linkedin{:href => "#"}<
-								%i.icon.icon-linkedin
-								LinkedIn
-							%a.share.gplus{:href => "#"}<
-								%i.icon.icon-gplus
-								Google+
-							%a.share.pinterest{:href => "#"}<
-								%i.icon.icon-pinterest
-								Pinterest
-						.entry-evaluate
-							%h3.header Avalie esse imóvel
+						.entry-side.vertical-only.mobile-only
+							= Haml::Engine.new(File.read(File.dirname(__FILE__) + "/_sidebar.haml")).render
+						.wrap
+							.entry-share
+								%h3.header Gostou desse imóvel? Compartilhe com os seus amigos!
+								%a.share.email{:href => "#"}<
+									%i.icon.icon-email
+									Envie para um amigo
+								%a.share.twitter{:href => "#"}<
+									%i.icon.icon-twitter
+									Twitter
+								%a.share.facebook{:href => "#"}<
+									%i.icon.icon-facebook
+									Facebook
+								%a.share.linkedin{:href => "#"}<
+									%i.icon.icon-linkedin
+									LinkedIn
+								%a.share.gplus{:href => "#"}<
+									%i.icon.icon-gplus
+									Google+
+								%a.share.pinterest{:href => "#"}<
+									%i.icon.icon-pinterest
+									Pinterest
+							.entry-evaluate
+								%h3.header Avalie esse imóvel
 				%section.entry-comments
 					%h3.header.simple Leave a Reply
 
