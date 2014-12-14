@@ -1,0 +1,48 @@
+﻿%header.head{:role => "banner", :style => "background-image:url(img/ap.jpg)"}
+	.wrap
+		.head-logo
+			%h1.logo<
+				%a{:href => "index.html"} ImóvelRJ
+		.head-navigation#nav{:role => "navigation"}
+			%button.head-toggle{:type => "button"}
+				- 3.times do |n|
+					%span
+			%nav.head-nav
+				%strong Menu de Navegação
+				%ul.head-menu
+					%li.menu-item<
+						%a{:href => "#"} Lançamentos
+					%li.menu-item<
+						%a{:href => "#"} Prontos para morar
+					%li.menu-item<
+						%a{:href => "#"} Comercial
+					%li.menu-item<
+						%a{:href => "#"} Casas na Barra da Tijuca
+		.head-social
+			%ul.head-links
+				%li.head-link.facebook<
+					%a{:href => "#", :target => "_blank"}<
+						%i.icon.icon-facebook
+				%li.head-link.twitter<
+					%a{:href => "#", :target => "_blank"}<
+						%i.icon.icon-twitter
+				%li.head-link.gplus<
+					%a{:href => "#", :target => "_blank"}<
+						%i.icon.icon-gplus
+				%li.head-link.linkedin<
+					%a{:href => "#", :target => "_blank"}<
+						%i.icon.icon-linkedin
+				%li.head-link.youtube<
+					%a{:href => "#", :target => "_blank"}<
+						%i.icon.icon-youtube
+				%li.head-link.instagram<
+					%a{:href => "#", :target => "_blank"}<
+						%i.icon.icon-instagram
+		%form.head-search{:action => "", :method => "get"}
+			%fieldset
+				%legend O melhor atendimento por m²
+				%label{:for => "s"} Busque o imóvel dos seus sonhos
+				%p.head-field
+					%input.head-input#s{:type => "text", :name => "", :required => true, :placeholder => "Busque o imóvel dos seus sonhos"}/
+					%button.head-submit{:type => "submit"} Ok
+				%a.head-advanced{:href => "#"} Faça uma busca avançada aqui

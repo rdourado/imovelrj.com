@@ -1,0 +1,212 @@
+﻿!!!
+%html{:lang => "pt-br"}
+	%head
+		%meta{:charset => "UTF-8"}/
+		%title Imóvel RJ
+		/ %meta{:name => "viewport", :content => "width=device-width"}/
+		%meta{:name => "viewport", :content => "width=device-width, initial-scale=1"}/
+		%link{:rel => "stylesheet", :href => "css/screen.css", :media => "screen, projection"}/
+	%body.single
+		.cols
+			.wrap
+				- 12.times do |n|
+					.col
+		= Haml::Engine.new(File.read(File.dirname(__FILE__) + "/_header.haml")).render
+		%hr/
+		%main.main{:role => "main"}
+			.wrap
+				%article.entry.h-entry
+					%header.entry-head.cf
+						.entry-id
+							%h1.entry-title.p-name Grand Hyatt Barra da Tijuca Residences
+							%p.entry-category.p-category<
+								%a{:href => "#"}> Apartamento
+								,&nbsp;
+								%a{:href => "#"}> Suítes Residenciais na Barra da Tijuca
+						%p.entry-value.p-summary<
+							Preço:
+							%strong R$ 9.999.999,99
+						%ul.entry-meta.p-location.h-adr
+							%li<
+								Endereço:
+								%strong.p-street-address Avenida Sernambetiba, 9600
+							%li<
+								Bairro:
+								%strong.p-locality Barra da Tijuca
+							%li<
+								Área:
+								%strong 121 - 429m²
+							%li<
+								Nº de quartos:
+								%strong Suítes residenciais
+							%li<
+								Vagas na garagem:
+								%strong 2 até 16 vagas
+					.entry-body.content.e-content
+						.gallery
+							%a.gallery-view{:href => "#"}<
+								%img{:src => "http://dummyimage.com/620x486", :alt => "", :width => "620", :height => "486"}/
+							- 4.times do |n|
+								%a.gallery-thumb{:href => "#"}<
+									%img{:src => "http://dummyimage.com/140x106", :alt => "", :width => "140", :height => "160"}/
+						%p Apartamentos com área privativa de 121,66m² e 168,84m² (Executive); de 244,64m² até 290,50m² (Diplomatic); de 382,40m² e 429,58m² (Presidential) e coberturas de 471,53m² até 1.041,39m² (Penthouse 180º e 360º). Ampla varanda, de 2 até 16 vagas de garagem. Infraestrutura de lazer e segurança, integração total com o futuro Hotel Grand Hyatt. Sofisticação e alto padrão de qualidade. Com vista indevassável para o mar e para a Lagoa de Marapendi.
+						%h2 Características desse imóvel
+						%ul.three
+							%li Lorem Ipsum is simply
+							%li Dummy text of the printing
+							%li And typesetting industry
+							%li Lorem Ipsum has
+							%li Been the industry's
+							%li Standard dummy
+							%li Text ever since the 1500s
+							%li When an unknown
+							%li Printer took a galley
+						%ul.three
+							%li Dummy text of the printing
+							%li And typesetting industry
+							%li Lorem Ipsum has
+							%li Been the industry's
+							%li Standard dummy
+							%li Text ever since the 1500s
+							%li When an unknown
+							%li Printer took a galley
+							%li Of type and scrambled
+						%ul.three
+							%li Lorem Ipsum is simply
+							%li Dummy text of the printing
+							%li And typesetting industry
+							%li Lorem Ipsum has
+							%li Been the industry's
+							%li Standard dummy
+							%li Text ever since the 1500s
+							%li When an unknown
+							%li Printer took a galley
+					.entry-side
+						%aside.widget.widget-contact
+							%form.form-contact{:action => "", :method => "post"}
+								%fieldset
+									%legend.widget-title Dúvidas? Fale Conosco!
+									%p.field
+										%input#name{:type => "text", :name => "", :placeholder => "Nome:", :required => true, :aria => {:required => "true", :label => "Nome"}}/
+									%p.field
+										%input#phone{:type => "text", :name => "", :placeholder => "Telefone:", :required => true, :aria => {:required => "true", :label => "Telefone"}}/
+									%p.field
+										%input#email{:type => "text", :name => "", :placeholder => "E-mail:", :required => true, :aria => {:required => "true", :label => "E-mail"}}/
+									%p.field
+										%textarea#msg{:name => "", :cols => "30", :rows => "8", :placeholder => "Mensagem ou dúvida:", :required => true, :aria => {:required => "true", :label => "Mensagem ou dúvida"}}
+									%p.submit
+										%button.button{:type => "submit"} Enviar
+						%aside.widget.widget-text
+							%p<
+								%a{:href => "#"}<
+									%img.rounded{:src => "http://dummyimage.com/300x200", :alt => "", :width => "300", :height => "200"}/
+						%aside.widget.widget-neighbor
+							%h2.widget-title Casas vizinhas
+							%ul.neighbor-list
+								- 4.times do |n|
+									%li.neighbor-item<
+										%a{:href => "#"}
+											%img.neighbor-image{:src => "http://dummyimage.com/60x60", :alt => "", :width => "60", :height => "60"}/
+											%h3.neighbor-title Lorem Ipsum is simply dummy text
+											%strong.neighbor-value R$ 9.999.999,99
+					%footer.entry-foot
+						.entry-author
+							%h2.header Dicas do corretor
+							%img.author-avatar{:src => "http://dummyimage.com/80x80", :alt => "", :width => "80", :height => "80"}/
+							%p Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+						%ul.nav-tabs{:role => "tablist"}
+							%li.active{:role => "presentation"}<
+								%a{:href => "#tab1", :role => "tab", :aria => {:controls => "tab1"}} Arredores
+							%li{:role => "presentation"}<
+								%a{:href => "#tab2", :role => "tab", :aria => {:controls => "tab2"}} Mapas
+							%li{:role => "presentation"}<
+								%a{:href => "#tab3", :role => "tab", :aria => {:controls => "tab3"}} Plantas
+						.tab-content.content
+							.tab-pane.active#tab1{:role => "tabpanel"}
+								%p Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+								%p Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+								%p Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+							.tab-pane#tab2{:role => "tabpanel"}
+								%p Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+								%p Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+							.tab-pane#tab3{:role => "tabpanel"}
+								%p Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+						.entry-share
+							%h3.header Gostou desse imóvel? Compartilhe com os seus amigos!
+							%a.share.email{:href => "#"}<
+								%i.icon.icon-email
+								Envie para um amigo
+							%a.share.twitter{:href => "#"}<
+								%i.icon.icon-twitter
+								Twitter
+							%a.share.facebook{:href => "#"}<
+								%i.icon.icon-facebook
+								Facebook
+							%a.share.linkedin{:href => "#"}<
+								%i.icon.icon-linkedin
+								LinkedIn
+							%a.share.gplus{:href => "#"}<
+								%i.icon.icon-gplus
+								Google+
+							%a.share.pinterest{:href => "#"}<
+								%i.icon.icon-pinterest
+								Pinterest
+						.entry-evaluate
+							%h3.header Avalie esse imóvel
+				%section.entry-comments
+					%h3.header.simple Leave a Reply
+
+				%section.entry-related
+					%h3.header.orange Se você gostou desse imóvel, talvez se interesse por esses imóveis também
+					%ul.related-list
+						- 6.times do |n|
+							%li.related-item<
+								%a{:href => "#"}
+									%img.related-image{:src => "http://dummyimage.com/140x104", :alt => "", :width => "140", :height => "104"}/
+									%h4.related-title Lorem Ipsum is simply dummy text
+									%strong.related-value R$ 9.999.999,99
+			.main-primary
+				.wrap
+					- 2.times do |n|
+						%section.main-feature
+							%a{:href => "#"}
+								%h2.feat-title Lançamentos
+								%img.feat-image{:src => "http://dummyimage.com/460x346", :alt => ""}/
+							%p<
+								%strong Aqui você encontrará os melhores lançamentos em imóveis.
+								%br>
+								Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies.
+			%hr/
+			.main-secondary
+				.wrap
+					.blog-features
+						.blog-primary
+							%a{:href => "#"}
+								%h3.blog-title Blog Planta Baixa
+								%img{:src => "http://dummyimage.com/300x226", :alt => ""}/
+						.blog-secondary
+							%a{:href => "#"}
+								%img{:src => "http://dummyimage.com/80x80", :alt => ""}/
+								%h3.blog-title As melhores dicas de quem possui experiência em mais de 200 imóveis negociados
+					%ul.blog-posts
+						%li.blog-post<
+							%a{:href => "#"} Contrary to popular belief, Lorem Ipsum is not simply random text.
+						%li.blog-post<
+							%a{:href => "#"} It has roots in a piece of classical Latin literature from 45 BC.
+						%li.blog-post<
+							%a{:href => "#"} Making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia.
+						%li.blog-post<
+							%a{:href => "#"} Looked up one of the more obscure Latin words.
+					%ul.blog-posts
+						%li.blog-post<
+							%a{:href => "#"} There are many variations of passages of Lorem Ipsum available.
+						%li.blog-post<
+							%a{:href => "#"} But the majority have suffered alteration in some form, by injected humour, or randomised words which.
+						%li.blog-post<
+							%a{:href => "#"} Don't look even slightly believable. If you are going to use a passage of Lorem Ipsum.
+						%li.blog-post<
+							%a{:href => "#"} You need to be sure there isn't anything embarrassing hidden in the middle of text.
+		%hr/
+		= Haml::Engine.new(File.read(File.dirname(__FILE__) + "/_footer.haml")).render
+		%script{:src => "http://code.jquery.com/jquery-1.11.0.min.js"}
+		%script{:src => "js/app.js"}

@@ -12,10 +12,20 @@ $green-light: #e7ecbc
 $green: #2f977c
 $green-dark: #167146
 $gray: #4f4f51
+$orange: #fe6f1a
 
-$columns: 12
+$columns-desktop: 12
+$columns-horizontal: 10
+$columns-vertical: 6
+$columns-mobile: 4
+$max-desktop: 960px
+$max-horizontal: $max-desktop / $columns-desktop * $columns-horizontal
+$max-vertical: $max-desktop / $columns-desktop * $columns-vertical
+$max-mobile: $max-desktop / $columns-desktop * $columns-mobile
+
 $gutter: 10px
-$max-width: 960px
+$columns: $columns-desktop
+$max-width: $max-desktop
 
 $roboto: "Roboto", sans-serif
 $iconfont: "imovelrj"
@@ -32,7 +42,6 @@ $retina: sprite-map("retina/*.png", $layout: smart)
 	background-position: sprite-position($sprites, $sprite)
 	height: image-height(sprite-file($sprites, $sprite))
 	width: image-width(sprite-file($sprites, $sprite))
-
 	@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi)
 		background-image: sprite-url($retina)
 		background-size: (image-width(sprite-path($retina)) / 2) (image-height(sprite-path($retina)) / 2)
@@ -62,7 +71,8 @@ $retina: sprite-map("retina/*.png", $layout: smart)
 	padding: 0
 	+box-sizing(border-box)
 body
-	font: 14px/22px sans-serif
+	color: $gray
+	font: 14px/24px sans-serif
 	-webkit-font-smoothing: antialiased
 	-moz-osx-font-smoothing: grayscale
 	-webkit-text-size-adjust: 100%
@@ -101,6 +111,10 @@ a
 	content: "n"
 .icon-instagram:before
 	content: "i"
+.icon-pinterest:before
+	content: "p"
+.icon-email:before
+	content: "m"
 .icon-eye:before
 	content: "e"
 .icon-search:before
@@ -108,12 +122,149 @@ a
 
 //
 
+.cf
+	+pie-clearfix
 .wrap
+	@extend .cf
 	height: 100%
 	margin: 0 auto
 	max-width: $max-width
 	position: relative
-	+pie-clearfix
+
+.cols
+	+stretch
+	font-size: 0
+	pointer-events: none
+	position: fixed
+	z-index: 90
+	.col
+		+col()
+		background: rgba(#f00,.1)
+		+background-clip(content-box)
+		display: inline-block
+		height: 100%
+	@media screen and (max-width : $max-desktop), screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape)
+		.col
+			+col(1, $columns-horizontal)
+			&:nth-child(n+11)
+				display: none
+	@media screen and (max-width : $max-horizontal), screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : portrait)
+		.col
+			+col(1, $columns-vertical)
+			&:nth-child(n+7)
+				display: none
+	@media screen and (max-width : $max-vertical), screen and (min-device-width : 320px) and (max-device-width : 568px) and (orientation : portrait)
+		.col
+			+col(1, $columns-mobile)
+			&:nth-child(n+5)
+				display: none
+
+.header
+	color: $green
+	font: bold 18px/24px sans-serif
+	margin-bottom: 24px
+	&.orange
+		color: $orange
+
+.button
+	background: $green-dark
+	border: 1px solid $green
+	border-radius: 10px
+	color: #fff
+	cursor: pointer
+	display: block
+	font: 14px sans-serif
+	padding: 14px
+	width: 100%
+	+single-transition(background, $speed, $ease)
+	&:hover, &:focus, &:active
+		background: $green
+
+.share
+	+background(linear-gradient(#fcfafa, shade(#fcfafa,15%)))
+	border-radius: 3px
+	color: #10689e
+	display: inline-block
+	font: 12px/30px sans-serif
+	padding: 0 15px
+	+box-shadow(0 2px 3px 0 rgba(#000,.2))
+	.icon
+		display: inline-block
+		font-size: 16px
+		margin-right: 3px
+		position: relative
+		top: 2px
+		vertical-align: middle
+	&.facebook
+		+background(linear-gradient(#3a589b, shade(#3a589b,15%)))
+		color: #fff
+	&.twitter
+		+background(linear-gradient(#598dca, shade(#598dca,15%)))
+		color: #fff
+	&.gplus
+		+background(linear-gradient(#ca4638, shade(#ca4638,15%)))
+		color: #fff
+	&.linkedin
+		+background(linear-gradient(#0077b5, shade(#0077b5,15%)))
+		color: #fff
+	&.pinterest
+		color: #cb2027
+
+.rounded
+	border: 1px solid $green
+	border-radius: 10px
+
+.field
+	margin-bottom: 12px
+	input,
+	textarea
+		background: #efefef
+		border: 1px solid #ccc
+		border-radius: 10px
+		display: block
+		font: 14px sans-serif
+		margin: 0
+		padding: 7px 14px
+		width: 100%
+
+.content
+	p, ul, ol
+		margin-bottom: 24px
+	ul, ol
+		padding-left: ($gutter * 2)
+	ol
+		counter-reset: i
+	li
+		position: relative
+	ul li:before,
+	ol li:before
+		content: "∗"
+		font: inherit
+		display: block
+		left: $gutter * -2
+		position: absolute
+		text-indent: 6px
+		top: 0
+	ol li:before
+		content: counter(i)
+	h1, h2, h3, h4, h5, h6
+		color: $green
+		font: bold 18px/24px sans-serif
+		margin: 48px 0 24px
+		&:first-child
+			margin-top: 0
+	.two
+		@extend .cf
+		float: left
+		width: (100% / 2)
+	.three
+		@extend .cf
+		float: left
+		width: (100% / 3)
+	.four
+		@extend .cf
+		float: left
+		width: (100% / 4)
 
 // Header
 
@@ -121,6 +272,7 @@ a
 	background-position: center center
 	+background-size(cover)
 	border-bottom: 8px solid $green
+	height: 330px
 	margin-bottom: 60px
 	&:before
 		background: rgba(#fff,.8)
@@ -133,13 +285,19 @@ a
 .head-logo
 	height: 150px
 	position: relative
-.logo
+.logo,
+.logo a
+	display: block
 	left: 50%
 	margin: (get-height("logo") / -2 - 4) 0 0 (get-width("logo") / -2)
 	position: absolute
 	top: 50%
 	+hide-text("right")
 	+use-sprite("logo")
+.logo a
+	background: none
+	margin: 0
+	+stretch
 .head-navigation
 	left: gutter()
 	position: absolute
@@ -188,10 +346,13 @@ a
 		&:hover, &:focus, &:active
 			background: tint($green,80%)
 .head-social
+	display: none
 	font-size: 0
 	position: absolute
 	right: gutter()
 	top: 59px
+	.home &
+		display: block
 	li
 		display: inline
 	a
@@ -243,22 +404,27 @@ a
 			background: #fff
 			color: #517fa6
 .head-search
-	margin: 240px auto 0
-	text-align: center
-	+col(10)
+	position: absolute
+	right: 0
+	top: 55px
+	+col(3)
+	legend, label
+		display: none
 	legend
 		color: #fff
-		display: block
 		font: 32px/1.5 $roboto
 		+text-shadow(0 2px 2px 0 rgba(#000,.9))
-	label
-		display: none
+	.home &
+		margin: 240px auto 0
+		position: static
+		text-align: center
+		+col(10)
+		legend
+			display: block
 .head-field
-	background: rgba(#fff,.5)
 	border-radius: 10px
 	display: table
 	margin-bottom: 5px
-	padding: 12px
 	width: 100%
 	&:before
 		color: $green
@@ -267,6 +433,9 @@ a
 		font: 12px $iconfont
 		margin: 13px 0 0 15px
 		position: absolute
+	.home &
+		background: rgba(#fff,.5)
+		padding: 12px
 .head-input
 	border: 1px solid shade(#fff,20%)
 	border-radius: 8px 0 0 8px
@@ -274,7 +443,9 @@ a
 	font: 14px sans-serif
 	height: 40px
 	padding: 12px 10px 12px 37px
-	width: col(9,10)
+	width: col(3,4)
+	.home &
+		width: col(9,10)
 .head-submit
 	background: $green
 	border: 1px solid tint($green,20%)
@@ -284,16 +455,23 @@ a
 	display: table-cell
 	font: 14px sans-serif
 	padding: 11px 5px
-	width: col(1,10)
+	width: col(1,4)
+	.home &
+		width: col(1,10)
 .head-advanced
-	color: #fff
+	color: $green
 	float: right
-	font: 14px sans-serif
-	margin-right: col(1,10) + gutter(10)
+	font: 12px sans-serif
 	+single-transition(color, $speed)
-	+text-shadow(0 2px 2px 0 rgba(#000,.9))
 	&:hover, &:focus, &:active
-		color: $green-light
+		color: $green-dark
+	.home &
+		color: #fff
+		font: 14px sans-serif
+		margin-right: col(1,10) + gutter(10)
+		+text-shadow(0 2px 2px 0 rgba(#000,.9))
+		&:hover, &:focus, &:active
+			color: $green-light
 
 // Footer
 
@@ -350,10 +528,14 @@ a
 	float: left
 	+col(9)
 .foot-developer
+	display: block
 	float: right
-	padding-top: 3px
+	position: relative
+	right: gutter()
 	text-align: right
-	+col(3)
+	top: 4px
+	+hide-text("right")
+	+use-sprite("cristianoweb")
 
 // Home / Primary
 
@@ -434,13 +616,186 @@ a
 		float: left
 		margin-right: 13px
 
+// Single
+
+.entry-id,
+.entry-value
+	font: 16px/24px sans-serif
+	margin-bottom: 20px
+.entry-id
+	color: $green
+	float: left
+	+col(9)
+	a
+		color: $green
+		+single-transition(color, $speed, $ease)
+		&:hover, &:focus, &:active
+			color: $green-dark
+.entry-value
+	color: $orange
+	float: right
+	+col(3)
+	strong
+		display: block
+		font-size: 20px
+.entry-title
+	font-size: 20px
+	font-weight: bold
+.entry-meta
+	clear: both
+	display: table
+	font: 12px/18px sans-serif
+	margin-bottom: 30px
+	+col(12)
+	li
+		display: table-cell
+	strong
+		display: block
+		font-size: 14px
+		font-weight: bold
+
+.entry-body
+	float: left
+	margin-bottom: 30px
+	+col(8)
+
+.gallery
+	margin: 0 ($gutter * -1) 24px
+	+pie-clearfix
+	img
+		display: block
+		height: auto
+		width: 100%
+.gallery-view
+	display: block
+	margin-bottom: ($gutter * 2)
+	+col(8,8)
+.gallery-thumb
+	float: left
+	+col(2,8)
+
+.entry-side
+	float: right
+	margin-bottom: 30px
+	+col(4)
+
+.entry-foot
+	border-top: 1px solid $green-light
+	clear: both
+	margin: 0 gutter() 30px
+	padding-top: 30px
+.entry-author
+	margin-bottom: 30px
+	img
+		float: left
+		margin: 0 ($gutter * 2) ($gutter * 2) 0
+
+.nav-tabs
+	@extend .cf
+	border-bottom: 1px solid $green
+	clear: both
+	font-size: 0
+	margin-bottom: 24px
+	li
+		display: inline
+	a
+		border-radius: 5px 5px 0 0
+		color: $green
+		float: left
+		font: 14px/40px sans-serif
+		margin-right: 2px
+		padding: 0 $gutter
+		&:hover, &:focus, &:active
+			background: rgba($green,.1)
+	.active a
+		background: $green
+		color: #fff
+
+.entry-share
+	float: left
+	margin-bottom: 35px
+	width: col(9)
+.entry-evaluate
+	float: right
+	margin-bottom: 35px
+	width: col(3)
+
+.entry-comments
+	border-top: 1px solid $green-light
+	clear: both
+	margin: 0 gutter() 35px
+	padding: 35px col(3) 0 0
+
+.entry-related
+	margin-bottom: 35px
+	.header
+		+col(12)
+	&:after
+		border-bottom: 1px solid $green-light
+		content: ""
+		clear: both
+		display: block
+		height: 1px
+		margin: 0 gutter()
+		padding-top: 35px
+.related-item
+	float: left
+	font: 14px/24px sans-serif
+	+col(2)
+	img
+		display: block
+		margin-bottom: 30px
+.related-title,
+.related-value
+	font: inherit
+.related-value
+	color: $orange
+	font-size: 16px
+	font-weight: bold
+	display: block
+	margin-top: 6px
+
+// Sidebar
+
+.widget
+	@extend .cf
+	clear: both
+	margin-bottom: 24px
+.widget-title
+	color: $green
+	display: block
+	font: bold 18px sans-serif
+	margin-bottom: 24px
+
+.neighbor-item
+	font: 14px/20px sans-serif
+	margin-bottom: 12px
+	min-height: 60px
+	padding-left: 80px
+	position: relative
+	.neighbor-title,
+	.neighbor-value
+		font: inherit
+	img
+		display: block
+		height: 60px
+		left: 0
+		position: absolute
+		top: 0
+		width: 60px
+	strong,
+	.neighbor-value
+		color: $orange
+		font-size: 16px
+		font-weight: bold
+
 //
 // Tablet / Horizontal
 //
 
-@media screen and (max-width : $max-width), screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape)
-	$columns: 10
-	$max-width: $max-width / 12 * $columns
+@media screen and (max-width : $max-desktop), screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape)
+	$columns: $columns-horizontal
+	$max-width: $max-horizontal
 
 	@if $fluid == false
 		.wrap
@@ -466,20 +821,40 @@ a
 		right: gutter($columns)
 		top: 19px
 	.head-search
-		+col(8,$columns)
-		legend
-			color: $green
-			+text-shadow(none)
+		right: col(1.5,$columns)
+		top: 15px
+		+col(3,$columns)
 		.home &
 			margin-top: 645px
+			+col(8,$columns)
+			legend
+				color: $green
+				+text-shadow(none)
 	.head-input
-		width: col(7,$columns - 2)
+		.home &
+			width: col(7,$columns - 2)
 	.head-submit
-		width: col(1,$columns - 2)
+		.home &
+			width: col(1,$columns - 2)
 	.head-advanced
 		color: $green
-		margin-right: col(1,$columns - 2) + gutter($columns - 2)
+		font-size: 14px
+		position: absolute
+		right: gutter(3)
+		text-align: right
+		top: 4px
+		width: 50%
 		+text-shadow(none)
+		+translateX(100%)
+		.home &
+			color: $green
+			font-size: 12px
+			margin-right: col(1,$columns - 2) + gutter($columns - 2)
+			position: static
+			+translateX(0)
+			+text-shadow(none)
+			&:hover, &:focus, &:active
+				color: $green-dark
 
 	.foot-sales
 		+col(3,$columns)
@@ -490,7 +865,7 @@ a
 	.foot-copyright
 		+col(8,$columns)
 	.foot-developer
-		+col(2,$columns)
+		right: gutter($columns)
 	.foot-title
 		font-size: 18px
 
@@ -514,15 +889,16 @@ a
 // Tablet / Vertical
 //
 
-@media screen and (max-width : $max-width / 12 * 10), screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : portrait)
-	$columns: 6
-	$max-width: $max-width / 12 * $columns
+@media screen and (max-width : $max-horizontal), screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : portrait)
+	$columns: $columns-vertical
+	$max-width: $max-vertical
 
 	@if $fluid == false
 		.wrap
 			max-width: $max-width
 
 	.head
+		margin-bottom: 230px
 		.home &
 			height: 440px
 	.head-navigation
@@ -530,32 +906,47 @@ a
 	.logo
 		left: col(1,$columns) + gutter($columns)
 	.head-social
+		display: block
 		right: gutter($columns)
 	.head-search
+		margin-top: 305px
+		position: static
 		+col($columns,$columns)
 		legend
+			color: $green
+			display: block
 			font-size: 22px
+			text-align: center
+			+text-shadow(none)
 		.home &
 			margin-top: 415px
-	.head-field
-		padding-left: 0
-		padding-right: 0
-	.head-input
+			+col($columns,$columns)
+	.head-field,
+	.home .head-field
+		padding: 12px 0
+	.head-input,
+	.home .head-input
 		width: col(5,$columns)
-	.head-submit
+	.head-submit,
+	.home .head-submit
 		width: col(1,$columns)
 	.head-advanced
+		position: static
 		margin-right: col(1,$columns)
+		+translateX(0)
+		.home &
+			font-size: 14px
+			margin-right: col(1,$columns)
 
 	.foot-more
 		+background-size(cover)
-	.foot-copyright,
-	.foot-developer
+	.foot-copyright
 		padding: 20px 0
 		text-align: center
 		+col($columns,$columns)
-		img
-			display: inline
+	.foot-developer
+		float: none
+		margin: 20px auto
 	.foot-sales,
 	.foot-tags
 		+col($columns,$columns)
@@ -581,9 +972,9 @@ a
 // iPhone
 //
 
-@media screen and (max-width : $max-width / 12 * 6), screen and (min-device-width : 320px) and (max-device-width : 568px) and (orientation : portrait)
-	$columns: 4
-	$max-width: $max-width / 12 * $columns
+@media screen and (max-width : $max-vertical), screen and (min-device-width : 320px) and (max-device-width : 568px) and (orientation : portrait)
+	$columns: $columns-mobile
+	$max-width: $max-mobile
 
 	@if $fluid == false
 		.wrap
@@ -613,7 +1004,6 @@ a
 		margin-right: 0
 
 	.foot-copyright,
-	.foot-developer,
 	.foot-sales,
 	.foot-tags,
 	.main-feature,

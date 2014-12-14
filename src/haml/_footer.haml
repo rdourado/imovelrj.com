@@ -1,0 +1,28 @@
+﻿%footer.foot{:role => "contentinfo"}
+	.foot-more
+		.wrap
+			.foot-sales
+				%a{:href => "#"}<
+					%h3.foot-title Venda e avalie seu imóvel conosco
+					%img{:src => "http://dummyimage.com/300x226", :alt => ""}/
+			.foot-tags
+				%h4.foot-title<
+					%i.icon.icon-eye>
+					Imóveis mais acessados
+				%p
+					- ["Soft Inn Rio Business Hotel", "On The Park", "Gran Residencial Clube Cachambi", "Blue Houses", "Mansões da Barra da Tijuca", "Luau do Recreio", "B.Side", "Aquarela Carioca", "Rivieras D’Florença", "Assembleia One", "Place Verte", "Península Life", "Del Lago", "Alameda dos Eucalíptos", "Residencial Meridiano Arpoador", "Alphagreen", "Holiday Inn Porto Maravilha", "Riserva Golf", "Saint Barth", "Blue Houses", "Bora Bora", "Santa Marina"].each do |a|
+						%a{:href => "#"} #{a}
+				%h4.foot-title<
+					%i.icon.icon-search>
+					Bairros mais procurados
+				%p
+					- ["Barra da Tijuca", "Recreio dos Bandeirantes", "Península", "Jacarepaguá", "Porto Maravilha", "Botafogo", "Ipanema", "São Conrado", "Leblon", "Centro", "Copacabana", "Laranjeiras", "Tijuca", "Méier", "Cidade Jardim", "Flamengo", "Humaitá", "Lagoa"].each do |a|
+						%a{:href => "#"} #{a}
+	%hr/
+	.foot-footer
+		.wrap
+			%p.foot-copyright<
+				Imóvel RJ é marca em registro de propriedade da ICI Negócios Imobiliários CNPJ nº 14.717.017/0001-79 - Creci Jurídico nº 5361
+				%br>
+				Todos os Direitos Reservados | Avenida das Américas 333, sala 1207 Barra da Tijuca, Rio de Janeiro - CEP 22631-003 | (21) 9 7960-7278
+			%a.foot-developer{:href => "http://cristianoweb.com.br/", :target => "_blank"} @cristianoweb
