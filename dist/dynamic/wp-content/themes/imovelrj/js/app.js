@@ -1,0 +1,1 @@
+!function($){var e,n,t,a;e=$(document),t=$(".head-toggle"),n=!1,a=function(e){return $(e.target).closest(".head-navigation").length?void 0:t.trigger("click")},t.on("click",function(t){return t.preventDefault(),n?($(".head-nav").removeClass("active"),e.off("click.rj")):($(".head-nav").addClass("active"),e.on("click.rj",a)),n=!n})}(jQuery);

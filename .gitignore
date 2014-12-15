@@ -11,3 +11,12 @@ wp-content/cache/
 wp-content/upgrade/
 wp-content/uploads/
 wp-content/wp-cache-config.php
+dist/dynamic/*.*
+dist/dynamic/wp-admin
+dist/dynamic/wp-content/*.*
+dist/dynamic/wp-content/languages
+dist/dynamic/wp-content/plugins
+dist/dynamic/wp-content/themes/*.*
+dist/dynamic/wp-content/themes/twentyfourteen
+dist/dynamic/wp-content/uploads
+dist/dynamic/wp-includes
