@@ -2,6 +2,17 @@
 
 // My Functions
 
+function home_id()
+{
+	return get_option( 'page_on_front' );
+}
+
+function plural( $number, $singular, $plural )
+{
+	$number = intval( $number );
+	echo $number . ' ' . ($number == 1 ? $singular : $plural);
+}
+
 function my_menu()
 {
 	wp_nav_menu( array(
@@ -16,6 +27,206 @@ function my_menu()
 	) );
 }
 
+function my_select( $name, $list )
+{
+	$str  = '<span class="select">';
+	$str .= '<select name="' . $name . '" id="' . $name . '">';
+	foreach( $list as $key => $value ) {
+		$str .= '<option value="' . $key . '"' . (isset($_REQUEST[$name]) && $_REQUEST[$name] == $key ? ' selected' : '') . '>' . $value . '</option>';
+	}
+	$str .= '</span></select>';
+	echo $str;
+}
+
+function my_single_term( $tax )
+{
+	global $post;
+	$terms = get_the_terms( $post->ID, $tax );
+	return reset( $terms )->name;
+}
+
+function my_image( $field = 'image', $size = 'thumbnail', $css = '', $source = null )
+{
+	global $post;
+	$image = get_field( $field, $source );
+	if ( ! $image ) {
+		$image = get_sub_field( $field );
+	}
+	if ( $image ) {
+		$sizes = $image['sizes'];
+		echo '<img src="' . $sizes[$size] . '" alt="' . $image['alt'] . '" class="' . $css . '" width="' . $sizes["{$size}-width"] . '" height="' . $sizes["{$size}-height"] . '">' . "\n";
+	}
+}
+
+function my_tags( $sep = ', ' )
+{
+	global $post;
+	$list   = array();
+	$tipo   = get_the_terms( $post->ID, 'tipo' );
+	$bairro = get_the_terms( $post->ID, 'bairro' );
+	$all    = array_merge( $tipo, $bairro );
+	foreach( $all as $term ) {
+		$list[] = '<a href="' . get_term_link( $term ) . '">' . $term->name . '</a>';
+	}
+	echo implode( $sep, $list );
+}
+
+function my_blog_posts($query, $ul_class = 'blog-posts', $li_class = 'blog-post')
+{
+	global $post;
+	$i = 0;
+	$total = min( +$query->query_vars['posts_per_page'], +$query->found_posts );
+	$breakpoint = ceil( $total / 2 );
+	while ( $query->have_posts() ) {
+		$query->the_post();
+		echo '<li class="' . $li_class . '"><a href="' . get_the_permalink() . '">' . get_the_title() . '</a></li>';
+		if ( ++$i == $breakpoint ) {
+			echo '</ul><ul class="' . $ul_class . '">';
+		}
+	}
+}
+
+function my_tax_list( $tax, $sep = ', ' )
+{
+	global $wpdb;
+	$sql = "SELECT `name`, `slug` FROM `{$wpdb->terms}` WHERE `term_id` IN (
+			SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(`option_name`, '_', 2), '_', -1) FROM `{$wpdb->options}`
+			WHERE `option_name` LIKE '{$tax}_%_views' ORDER BY `option_value` DESC)";
+	$results = $wpdb->get_results( $sql );
+	$list = array();
+	foreach( $results as $term ) {
+		$list[] = '<a href="' . get_term_link( $term->slug, $tax ) . '">' . $term->name . '</a>';
+	}
+	echo implode( $sep, $list );
+}
+
+function my_related_posts()
+{
+    global $post;
+	$tags = wp_get_post_tags( $post->ID );
+
+    if ($tags) {
+	    $tag_ids = array();
+	    foreach( $tags as $individual_tag ) {
+	    	$tag_ids[] = $individual_tag->term_id;
+	    }
+
+	    $args = array(
+		    'tag__in'             => $tag_ids,
+		    'post_type'           => $post->post_type,
+		    'post__not_in'        => array( $post->ID ),
+		    'posts_per_page'      => 6,
+		    'ignore_sticky_posts' => true
+	    );
+
+	    $query = new WP_Query( $args );
+	    if ( $query->have_posts() ) :
+
+	    	?><section class="entry-related">
+				<h3 class="header orange">Se você gostou desse imóvel, talvez se interesse por esses imóveis também</h3>
+				<ul class="related-list"><?php
+
+		    while( $query->have_posts() ) :
+			    $query->the_post();
+			    ?><li class="related-item"><a href="<?php the_permalink() ?>">
+					<?php the_post_thumbnail( 'my-medium', array( 'class' => 'related-image' ) ) ?>
+					<h4 class="related-title"><?php the_title() ?></h4>
+					<strong class="related-value"><?php the_field( 'preco' ) ?></strong>
+				</a></li><?php
+			endwhile;
+
+			?></ul>
+			</section><?php
+
+		endif;
+    }
+
+    wp_reset_postdata();
+}
+
+function get_advanced_query()
+{
+	$query = array(
+		'post_type' => 'imovel',
+		'posts_per_page' => -1,
+		'meta_query' => array(
+			'relation' => 'AND',
+		),
+	);
+
+	if ( isset( $_REQUEST['bairro'] ) && $_REQUEST['bairro'] != '-1' ) {
+		$query['tax_query'] = array( array(
+			'taxonomy' => 'bairro',
+			'field'    => 'term_id',
+			'terms'    => $_REQUEST['bairro'],
+		) );
+	}
+
+	if ( isset( $_REQUEST['quartos'] ) && $_REQUEST['quartos'] != '-1' ) {
+		$query['meta_query'][] = array(
+			'key'     => 'quartos',
+			'value'   => $_REQUEST['quartos'],
+			'type'    => 'numeric',
+			'compare' => '>=',
+		);
+	}
+
+	if ( isset( $_REQUEST['vagas'] ) && $_REQUEST['vagas'] != '-1' ) {
+		$query['meta_query'][] = array(
+			'key'     => 'vagas',
+			'value'   => $_REQUEST['vagas'],
+			'type'    => 'numeric',
+			'compare' => '>=',
+		);
+	}
+
+	if ( isset( $_REQUEST['preco'] ) && $_REQUEST['preco'] != '-1' ) {
+		$arr = explode( '-', $_REQUEST['preco'] );
+		$relation = array(
+			'relation' => 'AND',
+			array(
+				'key'     => 'preco',
+				'value'   => $arr[0],
+				'type'    => 'numeric',
+				'compare' => '>=',
+			),
+		);
+		if ( isset( $arr[1] ) ) {
+			$relation[] = array(
+				'key'     => 'preco',
+				'value'   => $arr[1],
+				'type'    => 'numeric',
+				'compare' => '<=',
+			);
+		}
+		$query['meta_query'][] = $relation;
+	}
+
+	if ( isset( $_REQUEST['area'] ) && $_REQUEST['area'] != '-1' ) {
+		$arr = explode( '-', $_REQUEST['area'] );
+		$relation = array(
+			'relation' => 'AND',
+			array(
+				'key'     => 'area',
+				'value'   => $arr[0],
+				'type'    => 'numeric',
+				'compare' => '>=',
+			),
+		);
+		if ( isset( $arr[1] ) ) {
+			$relation[] = array(
+				'key'     => 'area',
+				'value'   => $arr[1],
+				'type'    => 'numeric',
+				'compare' => '<=',
+			);
+		}
+		$query['meta_query'][] = $relation;
+	}
+
+	return $query;
+}
+
 // Setup
 
 add_action( 'after_setup_theme', 'my_setup' );
@@ -28,10 +239,11 @@ function my_setup()
 
 	add_theme_support( 'post-thumbnails' );
 	// set_post_thumbnail_size( 672, 372, true );
-	add_image_size( 'my-full',   620, 486, true );
-	add_image_size( 'my-large',  300, 226, true );
-	add_image_size( 'my-medium', 140, 106, true );
-	add_image_size( 'my-small',   80,  80, true );
+	add_image_size( 'my-feature', 460, 346, true );
+	add_image_size( 'my-full',    620, 486, true );
+	add_image_size( 'my-large',   300, 226, true );
+	add_image_size( 'my-medium',  140, 106, true );
+	add_image_size( 'my-small',    80,  80, true );
 
 	register_nav_menus( array(
 		'primary' => 'Menu'
@@ -55,11 +267,16 @@ function my_setup()
 	if( function_exists('acf_add_options_page') ) {
 		acf_add_options_page( array(
 			'page_title' 	=> 'Opções Gerais',
-			'menu_title'	=> 'Opções',
+			'menu_title'	=> 'Personalizar',
 			'menu_slug' 	=> 'acf-options',
 			'capability'	=> 'edit_posts',
 			'redirect'		=> false
 		) );
+		// acf_add_options_sub_page( array(
+		// 	'page_title' 	=> 'Página Inicial',
+		// 	'menu_title'	=> 'Página Inicial',
+		// 	'parent_slug'	=> 'acf-options',
+		// ) );
 		acf_add_options_sub_page( array(
 			'page_title' 	=> 'Redes Sociais',
 			'menu_title'	=> 'Redes Sociais',
@@ -73,10 +290,33 @@ function my_setup()
 	}
 }
 
+add_action( 'widgets_init', 'my_widgets_init' );
+
+function my_widgets_init() {
+	register_sidebar( array(
+		'name'          => 'Posts',
+		'id'            => 'sidebar-1',
+		'before_widget' => '<aside id="%1$s" class="widget %2$s">',
+		'after_widget'  => '</aside>',
+		'before_title'  => '<h2 class="widget_title">',
+		'after_title'   => '</h2>',
+	) );
+	register_sidebar( array(
+		'name'          => 'Páginas',
+		'id'            => 'sidebar-2',
+		'before_widget' => '<aside id="%1$s" class="widget %2$s">',
+		'after_widget'  => '</aside>',
+		'before_title'  => '<h2 class="widget_title">',
+		'after_title'   => '</h2>',
+	) );
+}
+
 add_action( 'wp_enqueue_scripts', 'my_scripts' );
 
 function my_scripts()
 {
+	global $post;
+
 	// CSSs
 	wp_enqueue_style( 'my-theme-css', get_template_directory_uri() . '/css/screen.css', array(), filemtime( TEMPLATEPATH . '/css/screen.css' ) );
 
@@ -84,8 +324,234 @@ function my_scripts()
 	wp_deregister_script( 'jquery' );
 	wp_register_script( 'jquery', 'http://code.jquery.com/jquery-1.11.0.min.js');
 	wp_enqueue_script( 'jquery' );
-	wp_enqueue_script( 'my-theme-js', get_template_directory_uri() . '/js/app.js', array( 'jquery' ), filemtime( TEMPLATEPATH . '/js/interface.js' ), true );
+	wp_enqueue_script( 'my-theme-js', get_template_directory_uri() . '/js/app.js', array( 'jquery' ), filemtime( TEMPLATEPATH . '/js/app.js' ), true );
 
+	if ( is_single() )
+	{
+		wp_register_script( 'my-view-count', get_template_directory_uri() . '/js/single.js', array( 'jquery' ), filemtime( TEMPLATEPATH . '/js/single.js' ), true );
+		wp_localize_script( 'my-view-count', 'myAjax', array(
+			'ajaxurl' => admin_url( 'admin-ajax.php' ),
+			'post_id' => $post->ID,
+			'nonce'   => wp_create_nonce( 'my_view_count_nonce' ),
+		) );
+		wp_enqueue_script( 'my-view-count' );
+	}
+	else if ( is_tax() )
+	{
+		$term = get_term_by( 'slug', get_query_var( 'term' ), get_query_var( 'taxonomy' ) );
+		wp_register_script( 'my-tax-count', get_template_directory_uri() . '/js/tax.js', array( 'jquery' ), filemtime( TEMPLATEPATH . '/js/tax.js' ), true );
+		wp_localize_script( 'my-tax-count', 'myAjax', array(
+			'ajaxurl'  => admin_url( 'admin-ajax.php' ),
+			'tax_id'   => $term->term_id,
+			'tax_type' => get_query_var( 'taxonomy' ),
+			'nonce'    => wp_create_nonce( 'my_tax_count_nonce' ),
+		) );
+		wp_enqueue_script( 'my-tax-count' );
+	}
+
+}
+
+// Actions
+
+add_action( 'wp_head', 'my_wp_head' );
+
+function my_wp_head()
+{
+	$headers = get_field( 'headers', 'option' );
+	if ( $headers ) {
+		$head = $headers[array_rand( $headers, 1 )];
+		echo '<style>.head{background-image:url(' . $head['image']['url'] . ')}.head:after{content:"' . $head['text'] . '"}</style>'. "\n";
+	}
+}
+
+add_action( 'wp_footer', 'my_wp_footer' );
+
+function my_wp_footer()
+{
+?><div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/pt_BR/sdk.js#xfbml=1&appId=1553762011566589&version=v2.0";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script><?php
+}
+
+add_action( 'wp_ajax_my_view_count', 'my_view_count' );
+
+function my_view_count()
+{
+	if ( ! wp_verify_nonce( $_REQUEST['nonce'], 'my_view_count_nonce' ) ) {
+		exit( 'No naughty business please' );
+	}
+
+	$postID = $_REQUEST['post_id'];
+	if ( ! $postID ) {
+		die();
+	}
+	$views  = intval( get_post_meta( $postID, '_views', true ) );
+	if ( ! $views ) {
+		$views = 0;
+	}
+	$ok = update_post_meta( $postID, '_views', $views + 1 );
+
+	if ( $ok === false ) {
+		$result['type']  = 'error';
+		$result['count'] = $views;
+	} else {
+		$result['type']  = 'success';
+		$result['count'] = $views + 1;
+	}
+
+	if ( ! empty( $_SERVER['HTTP_X_REQUESTED_WITH'] ) && strtolower( $_SERVER['HTTP_X_REQUESTED_WITH'] ) == 'xmlhttprequest' ) {
+		$result = json_encode( $result );
+		echo $result;
+	} else {
+		header( 'Location: ' . $_SERVER['HTTP_REFERER'] );
+	}
+
+	die();
+}
+
+add_action( 'wp_ajax_my_tax_count', 'my_tax_count' );
+
+function my_tax_count()
+{
+	if ( ! wp_verify_nonce( $_REQUEST['nonce'], 'my_tax_count_nonce' ) ) {
+		exit( 'No naughty business please' );
+	}
+
+	$taxID = $_REQUEST['tax_id'];
+	$type  = $_REQUEST['tax_type'];
+	if ( ! $taxID && ! $type ) {
+		die();
+	}
+	$views = intval( get_option( "{$type}_{$taxID}_views", true ) );
+	if ( ! $views ) {
+		$views = 0;
+	}
+	$ok = update_option( "{$type}_{$taxID}_views", $views + 1 );
+
+	if ( $ok === false ) {
+		$result['type']  = 'error';
+		$result['count'] = $views;
+	} else {
+		$result['type']  = 'success';
+		$result['count'] = $views + 1;
+	}
+
+	if ( ! empty( $_SERVER['HTTP_X_REQUESTED_WITH'] ) && strtolower( $_SERVER['HTTP_X_REQUESTED_WITH'] ) == 'xmlhttprequest' ) {
+		$result = json_encode( $result );
+		echo $result;
+	} else {
+		header( 'Location: ' . $_SERVER['HTTP_REFERER'] );
+	}
+
+	die();
+}
+
+// Filters
+
+add_filter( 'acf/fields/wysiwyg/toolbars' , 'my_toolbars'  );
+
+function my_toolbars( $toolbars )
+{
+	$toolbars['Very Simple'] = array();
+	$toolbars['Very Simple'][1] = array('bold', 'italic' );
+	return $toolbars;
+}
+
+// Shortcode
+
+add_shortcode( 'busca-avancada', 'custom_shortcode' );
+
+function custom_shortcode()
+{
+	ob_start();
+	?><form action="<?php echo get_permalink(get_page_by_path('busca-avancada')); ?>" method="post" class="wrap">
+		<p class="field">
+			<label for="bairro" class="screen-reader-text">Bairro</label>
+			<span class="select">
+				<?php wp_dropdown_categories(array(
+					'id'       => 'bairro',
+					'name'     => 'bairro',
+					'taxonomy' => 'bairro',
+					'orderby'  => 'slug',
+					'selected' => isset($_REQUEST['bairro']) ? $_REQUEST['bairro'] : null,
+					'show_option_none' => 'Bairro',
+				)); ?>
+			</span>
+		</p>
+		<p class="field">
+			<label for="quartos" class="screen-reader-text">Quartos</label>
+			<?php my_select('quartos', array(
+				'-1' => 'Quartos',
+				'0'  => 'Studio',
+				'1'  => '1+',
+				'2'  => '2+',
+				'3'  => '3+',
+				'4'  => '4+',
+				'5'  => '5+',
+			)) ?>
+		</p>
+		<p class="field">
+			<label for="vagas" class="screen-reader-text">Vagas</label>
+			<?php my_select('vagas', array(
+				'-1' => 'Vagas',
+				'0'  => '0+',
+				'1'  => '1+',
+				'2'  => '2+',
+				'3'  => '3+',
+				'4'  => '4+',
+			)) ?>
+		</p>
+		<p class="field">
+			<label for="preco" class="screen-reader-text">Preço</label>
+			<?php my_select('preco', array(
+				'-1'              => 'Preço',
+				'200000-400000'   => 'R$200.000 a R$400.000',
+				'401000-600000'   => 'R$401.000 a R$600.000',
+				'601000-800000'   => 'R$601.000 a R$800.000',
+				'801000-1000000'  => 'R$801.000 a R$1.000.000',
+				'1001000-1300000' => 'R$1.001.000 a R$1.300.000',
+				'1301000-1600000' => 'R$1.301.000 a R$1.600.000',
+				'1601000-1900000' => 'R$1.601.000 a R$1.900.000',
+				'1901000-2200000' => 'R$1.901.000 a R$2.200.000',
+				'2201000-2500000' => 'R$2.201.000 a R$2.500.000',
+				'2501000-3000000' => 'R$2.501.000 a R$3.000.000',
+				'3001000-3500000' => 'R$3.001.000 a R$3.500.000',
+				'3501000-4000000' => 'R$3.501.000 a R$4.000.000',
+				'4001000-5000000' => 'R$4.001.000 a R$5.000.000',
+				'5000000'         => 'R$5.000.000+',
+			)) ?>
+		</p>
+		<p class="field">
+			<label for="area" class="screen-reader-text">Área</label>
+			<?php my_select('area', array(
+				'-1'      => 'Área',
+				'40-50'   => '40m² a 50m²',
+				'51-60'   => '51m² a 60m²',
+				'61-70'   => '61m² a 70m²',
+				'71-80'   => '71m² a 80m²',
+				'81-90'   => '81m² a 90m²',
+				'91-100'  => '91m² a 100m²',
+				'101-120' => '101m² a 120m²',
+				'121-150' => '121m² a 150m²',
+				'150-200' => '150m² a 200m²',
+				'200-300' => '200m² a 300m²',
+				'300-400' => '300m² a 400m²',
+				'400-600' => '400m² a 600m²',
+				'600-800' => '600m² a 800m²',
+				'800'     => '800m²+',
+			)) ?>
+		</p>
+		<p class="submit">
+			<button class="button" type="submit">Procurar</button>
+		</p>
+		<p><br><br></p>
+	</form><?php
+	return ob_get_clean();
 }
 
 // Register Custom Post Type
@@ -114,7 +580,7 @@ function custom_post_type()
 		'description'         => __( 'Imóveis', 'imovelrj' ),
 		'labels'              => $labels,
 		'supports'            => array( 'title', 'thumbnail', 'revisions', ),
-		'taxonomies'          => array( 'tipo' ),
+		'taxonomies'          => array( 'tipo', 'bairro', 'post_tag' ),
 		'hierarchical'        => false,
 		'public'              => true,
 		'show_ui'             => true,

@@ -7,7 +7,7 @@
 		<?php wp_head() ?>
 	</head>
 	<body <?php body_class() ?>>
-		<header class="head" role="banner" style="background-image:url(img/ap.jpg)">
+		<header class="head" role="banner">
 			<div class="wrap">
 				<div class="head-logo">
 <?php 				if (is_front_page()) : ?>

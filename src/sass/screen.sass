@@ -37,7 +37,7 @@ $iconfont: "imovelrj"
 $sprites: sprite-map("sprites/*.png", $layout: smart)
 $retina: sprite-map("retina/*.png", $layout: smart)
 
-@mixin use-sprite($sprite)
+=use-sprite($sprite)
 	background-image: sprite-url($sprites)
 	background-position: sprite-position($sprites, $sprite)
 	height: image-height(sprite-file($sprites, $sprite))
@@ -128,6 +128,14 @@ a
 
 .cf
 	+pie-clearfix
+.screen-reader-text
+	+squish-text
+	left: 0
+	position: absolute
+	top: 0
+.hide
+	display: none
+
 .wrap
 	@extend .cf
 	height: 100%
@@ -204,6 +212,15 @@ a
 		color: $gray
 		font-weight: normal
 
+.page-title
+	+col(12)
+	border-bottom: 1px solid $green
+	color: $green
+	font: 20px/24px $roboto
+	margin-bottom: 35px
+	padding-bottom: 20px
+	text-transform: uppercase
+
 .button
 	background: $green-dark
 	border: 1px solid $green
@@ -265,6 +282,33 @@ a
 		margin: 0
 		padding: 7px 14px
 		width: 100%
+	.select
+		background: #efefef
+		border: 1px solid #ccc
+		border-radius: 10px
+		cursor: pointer
+		display: block
+		overflow: hidden
+		position: relative
+		width: 100%
+		select
+			+appearance(none)
+			background: transparent
+			cursor: pointer
+			display: block
+			font: 14px sans-serif
+			margin: 0
+			padding: 7px 14px
+			width: 120%
+		&:after
+			border-top: 7px solid #ccc
+			border-left: 5px solid transparent
+			border-right: 5px solid transparent
+			content: ""
+			margin-top: -3px
+			position: absolute
+			right: 10px
+			top: 50%
 
 .content
 	p, ul, ol
@@ -294,12 +338,21 @@ a
 	border-bottom: 8px solid $green
 	height: 330px
 	margin-bottom: 60px
+	position: relative
 	&:before
 		background: rgba(#fff,.8)
 		content: ""
 		display: block
 		height: 150px
 		+stretch-x
+	&:after
+		bottom: 8px
+		color: #fff
+		display: block
+		font: 12px sans-serif
+		position: absolute
+		right: 10px
+		+text-shadow(0 1px 0 0 rgba(#000,.8))
 	.home &
 		height: 790px
 .head-logo
@@ -325,6 +378,7 @@ a
 .head-toggle
 	background: none
 	cursor: pointer
+	outline: none
 	width: 32px
 	span
 		background: $green
@@ -582,13 +636,18 @@ a
 	background: #cce09f generated-image-url("texture-1.jpg") center center
 	+background-size(cover)
 	padding: 60px 0
-.blog-features,
-.blog-posts
+.blog-features
 	float: left
 	+col(4)
 .blog-posts
-	li + li
+	float: left
+	+clearfix
+	+col(4)
+	li
 		border-top: 1px solid $green-dark
+		display: block
+		&:first-child
+			border-top: 0 none
 	a
 		display: block
 		color: $green-dark
@@ -641,7 +700,9 @@ a
 .entry-id,
 .entry-value
 	font: 16px/24px sans-serif
-	margin-bottom: 20px
+	// margin-bottom: 20px
+	~ .entry-meta
+		padding-top: 20px
 .entry-id
 	color: $green
 	float: left
@@ -669,13 +730,14 @@ a
 	+col(12)
 	li
 		display: table-cell
-	strong
+	strong, a
 		display: block
 		font-size: 14px
 		font-weight: bold
 
 .entry-body
 	float: left
+	margin-top: 30px
 	margin-bottom: 30px
 	+col(8)
 
@@ -688,14 +750,15 @@ a
 		width: 100%
 .gallery-view
 	display: block
-	margin-bottom: ($gutter * 2)
 	+col(8,8)
 .gallery-thumb
 	float: left
+	margin-top: ($gutter * 2)
 	+col(2,8)
 
 .entry-side
 	float: right
+	margin-top: 30px
 	margin-bottom: 30px
 	+col(4)
 
@@ -812,6 +875,50 @@ a
 		color: $orange
 		font-size: 16px
 		font-weight: bold
+
+// Archive
+
+.entry-image
+	float: left
+	+col(3)
+	img
+		display: block
+	+ .entry-head
+		float: left
+		width: col(9)
+		.entry-meta
+			margin-bottom: 0
+.post-image
+	float: left
+	+col(2)
+	img
+		display: block
+	+ .entry-head
+		float: left
+		width: col(10)
+		.entry-meta
+			margin-bottom: 0
+.entry-item
+	@extend .cf
+	border-bottom: 1px solid $green-light
+	margin-bottom: 35px
+	padding-bottom: 35px
+.nav-links
+	font-size: 15px
+	padding-bottom: (35px * 2)
+	text-align: center
+.page-numbers
+	display: inline-block
+	font-family: $roboto
+	line-height: 30px
+	text-align: center
+	min-width: 30px
+	&.current
+		background: $green-dark
+		color: #fff
+a.page-numbers
+	&:hover, &:focus, &:active
+		background: $green-light
 
 //
 // Tablet / Horizontal
