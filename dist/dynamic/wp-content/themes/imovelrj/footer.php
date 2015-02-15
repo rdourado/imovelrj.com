@@ -30,15 +30,6 @@
 						</a>
 					</div>
 					<div class="foot-tags">
-						<?php $query = new WP_Query(array('post_type' => 'imovel', 'posts_per_page' => -1, 'orderby' => 'meta_value_num', 'order' => 'DESC', 'meta_key' => '_views')) ?>
-						<?php if ($query->have_posts()) : ?>
-						<h4 class="foot-title"><i class="icon icon-eye"></i>Imóveis mais acessados</h4>
-						<p>
-							<?php while ($query->have_posts()) : $query->the_post(); ?>
-							<a href="<?php the_permalink() ?>"><?php the_title(); ?></a>
-							<?php endwhile; ?>
-						</p>
-						<?php endif; ?>
 						<h4 class="foot-title"><i class="icon icon-search"></i>Bairros mais procurados</h4>
 						<p>
 							<?php my_tax_list('bairro', "\n") ?>

@@ -268,15 +268,15 @@ function my_setup()
 
 	if( function_exists('acf_add_options_page') ) {
 		acf_add_options_page( array(
-			'page_title' 	=> 'Opções Gerais',
-			'menu_title'	=> 'Personalizar',
+			'page_title' 	=> 'Personalizar',
 			'menu_slug' 	=> 'acf-options',
 			'capability'	=> 'edit_posts',
-			'redirect'		=> true
+			'position'    => 21,
+			'redirect'		=> true,
 		) );
 		acf_add_options_sub_page( array(
-			'page_title' 	=> 'Página Inicial',
-			'menu_title'	=> 'Página Inicial',
+			'page_title' 	=> 'Destaques',
+			'menu_title'	=> 'Destaques',
 			'parent_slug'	=> 'acf-options',
 		) );
 		acf_add_options_sub_page( array(
@@ -289,6 +289,21 @@ function my_setup()
 			'menu_title'	=> 'Rodapé',
 			'parent_slug'	=> 'acf-options',
 		) );
+	}
+}
+
+add_action( 'admin_menu', 'remove_menus' );
+
+function remove_menus()
+{
+	global $menu;
+	$restricted = array( __('Tools'), __('Comments') );
+	end( $menu );
+	while ( prev( $menu ) ) {
+		$value = explode( ' ', $menu[key( $menu )][0] );
+		if ( in_array( $value[0] != NULL ? $value[0] : "" , $restricted ) ) {
+			unset( $menu[key( $menu )] );
+		}
 	}
 }
 
@@ -324,7 +339,7 @@ function my_scripts()
 
 	// JSs
 	wp_deregister_script( 'jquery' );
-	wp_register_script( 'jquery', 'http://code.jquery.com/jquery-1.11.0.min.js');
+	wp_register_script( 'jquery', 'http://code.jquery.com/jquery-1.11.0.min.js', array(), '1.10.0', true );
 	wp_enqueue_script( 'jquery' );
 
 	if ( is_single() )
@@ -332,17 +347,9 @@ function my_scripts()
 		// Fancybox
 		wp_enqueue_style( 'fancybox-css', get_template_directory_uri() . '/js/fancybox/jquery.fancybox.css', array( 'my-theme-css' ), '2.1.5' );
 		wp_enqueue_script( 'fancybox-js', get_template_directory_uri() . '/js/fancybox/jquery.fancybox.pack.js', array( 'jquery' ), '2.1.5', true );
+		// Google Maps
 		wp_enqueue_script( 'gmaps-api', 'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false', array( 'jquery' ), null, true );
 		wp_enqueue_script( 'gmaps-js', get_template_directory_uri() . '/js/gmaps.js', array( 'jquery', 'gmaps-api' ), filemtime( TEMPLATEPATH . '/js/gmaps.js' ), true );
-
-		// View Count
-		// wp_register_script( 'my-view-count', get_template_directory_uri() . '/js/single.js', array( 'jquery' ), filemtime( TEMPLATEPATH . '/js/single.js' ), true );
-		// wp_localize_script( 'my-view-count', 'myAjax', array(
-		// 	'ajaxurl' => admin_url( 'admin-ajax.php' ),
-		// 	'post_id' => $post->ID,
-		// 	'nonce'   => wp_create_nonce( 'my_view_count_nonce' ),
-		// ) );
-		// wp_enqueue_script( 'my-view-count' );
 	}
 	else if ( is_tax() )
 	{
