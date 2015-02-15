@@ -38,6 +38,17 @@
     .find 'a:first'
     .trigger 'click.rj'
 
-  return
+  # Fancybox
 
+  $ '.fancy,a[href$=".gif"],a[href$=".jpg"],a[href$=".jpeg"],a[href$=".png"]'
+    .fancybox()
+  $ '.gallery-view'
+    .off 'click'
+    .on 'click', (e) ->
+      do e.preventDefault
+      $ this
+        .next()
+        .trigger 'click'
+
+  return
 ) jQuery

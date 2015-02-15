@@ -27,53 +27,95 @@
 						</ul>
 					</header>
 					<div class="entry-body content e-content">
-<?php 					$images = get_field('galeria');
-						if ($images) : ?>
+						<?php
+						$images = get_field('galeria');
+						if ($images) :
+						?>
 						<div class="gallery wrap">
 							<a class="gallery-view" href="<?php echo $images[0]['url']; ?>"><img alt="" src="<?php echo $images[0]['sizes']['my-full']; ?>" width="620"></a>
-<?php 						foreach ($images as $image) : ?>
-							<a class="gallery-thumb" href="<?php echo $image['url']; ?>"><img alt="" src="<?php echo $image['sizes']['my-large']; ?>" width="140"></a>
-<?php 						endforeach; ?>
+							<?php foreach ($images as $image) : ?>
+							<a class="gallery-thumb fancy" data-fancybox-group="imovel" href="<?php echo $image['url']; ?>"><img alt="" src="<?php echo $image['sizes']['my-large']; ?>" width="140"></a>
+							<?php endforeach; ?>
 						</div>
-<?php 					endif; ?>
+						<?php endif; ?>
 						<?php the_field('descricao') ?>
+						<?php if (have_rows('caracteristicas')) : ?>
 						<h2>Características desse imóvel</h2>
-<?php 					if (have_rows('caracteristicas')) : ?>
 						<ul class="three">
-<?php 						while (have_rows('caracteristicas')) : the_row(); ?>
+							<?php while (have_rows('caracteristicas')) : the_row(); ?>
 							<li><?php the_sub_field('caracteristica') ?></li>
-<?php 						endwhile; ?>
+							<?php endwhile; ?>
 						</ul>
-<?php 					endif; ?>
+						<?php endif; ?>
 					</div>
 					<div class="entry-side desktop-only horizontal-only">
 						<?php get_sidebar() ?>
 					</div>
 					<footer class="entry-foot">
-<?php 					if (get_field('dicas')) : ?>
+						<?php if (get_field('dicas')) : ?>
 						<div class="entry-author">
 							<h2 class="header">Dicas do corretor</h2>
 							<?php echo get_avatar(get_the_author_meta( 'ID' ), 80); ?>
 							<?php the_field('dicas') ?>
 						</div>
-<?php 					endif; ?>
+						<?php endif; ?>
 						<ul class="nav-tabs" role="tablist">
 							<?php if (get_field('arredores')) { ?>
 							<li role="presentation"><a aria-controls="tab1" href="#tab1" role="tab">Arredores</a></li>
-							<?php } if (get_field('mapas')) { ?>
+							<?php } if (get_field('mapas') || get_field('mapas_gmap')) { ?>
 							<li role="presentation"><a aria-controls="tab2" href="#tab2" role="tab">Mapas</a></li>
-							<?php } if (get_field('plantas')) { ?>
+							<?php } if (get_field('plantas') || get_field('plantas_galeria')) { ?>
 							<li role="presentation"><a aria-controls="tab3" href="#tab3" role="tab">Plantas</a></li>
 							<?php } ?>
 						</ul>
 						<div class="tab-content content">
-							<?php foreach(array('arredores', 'mapas', 'plantas') as $index => $field) : ?>
-							<?php if (get_field($field)) : ?>
-							<div class="tab-pane active" id="tab<?php echo $index + 1; ?>" role="tabpanel">
-								<?php the_field($field) ?>
+
+							<?php if (get_field('arredores')) : ?>
+							<div class="tab-pane active" id="tab1" role="tabpanel">
+								<?php the_field('arredores') ?>
 							</div>
 							<?php endif; ?>
-							<?php endforeach; ?>
+
+							<?php if (get_field('mapas_tipo') == 'texto' && get_field('mapas')) : ?>
+							<div class="tab-pane active" id="tab2" role="tabpanel">
+								<?php the_field('mapas') ?>
+							</div>
+							<?php endif; ?>
+
+							<?php if (get_field('mapas_tipo') == 'mapa' && get_field('mapas_gmap')) : ?>
+							<div class="tab-pane active" id="tab2" role="tabpanel">
+								<?php
+								$location = get_field('mapas_gmap');
+								if (!empty($location)) :
+								?>
+								<div class="acf-map">
+									<div class="marker" data-lat="<?php echo $location['lat']; ?>" data-lng="<?php echo $location['lng']; ?>"></div>
+								</div>
+								<?php
+								endif;
+								?>
+							</div>
+							<?php endif; ?>
+
+							<?php if (get_field('plantas_tipo') == 'texto' && get_field('plantas')) : ?>
+							<div class="tab-pane active" id="tab3" role="tabpanel">
+								<?php the_field('plantas') ?>
+							</div>
+							<?php endif; ?>
+
+							<?php if (get_field('plantas_tipo') == 'galeria' && get_field('plantas_galeria')) : ?>
+							<div class="tab-pane active" id="tab3" role="tabpanel">
+								<?php
+								$plantas = get_field('plantas_galeria');
+								foreach ($plantas as $image) :
+								?>
+								<a class="plantas-thumb fancy" data-fancybox-group="plantas" href="<?php echo $image['url']; ?>"><img alt="" src="<?php echo $image['sizes']['my-large']; ?>" width="140"></a>
+								<?php
+								endforeach;
+								?>
+							</div>
+							<?php endif; ?>
+
 						</div>
 						<div class="entry-side vertical-only mobile-only">
 							<?php get_sidebar() ?>
@@ -106,7 +148,7 @@
 					<h3 class="header simple">Deixe um comentário</h3>
 					<div class="fb-comments" data-href="<?php the_permalink() ?>" data-numposts="5" data-colorscheme="light"></div>
 				</section>
-<?php 			endwhile; ?>
+				<?php endwhile; ?>
 				<?php my_related_posts() ?>
 			</div>
 <?php get_footer() ?>

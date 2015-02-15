@@ -1,5 +1,7 @@
 <?php
 
+setlocale( LC_MONETARY, 'pt_BR' );
+
 // My Functions
 
 function home_id()
@@ -25,6 +27,16 @@ function my_menu()
 		'fallback_cb'     => false,
 		'depth'           => 1,
 	) );
+}
+
+function my_price( $field = 'preco' )
+{
+	global $post;
+	$value = get_field( $field, $post->ID );
+	if ( ! $value ) {
+		$value = get_sub_field( $field );
+	}
+	echo money_format( '%.2n', $value );
 }
 
 function my_select( $name, $list )
@@ -131,7 +143,7 @@ function my_related_posts()
 			    ?><li class="related-item"><a href="<?php the_permalink() ?>">
 					<?php the_post_thumbnail( 'my-medium', array( 'class' => 'related-image' ) ) ?>
 					<h4 class="related-title"><?php the_title() ?></h4>
-					<strong class="related-value"><?php the_field( 'preco' ) ?></strong>
+					<strong class="related-value"><?php my_price( 'preco' ) ?></strong>
 				</a></li><?php
 			endwhile;
 
@@ -236,6 +248,7 @@ function my_setup()
 	// add_editor_style( array( 'css/editor-style.css', my_font_url(), 'genericons/genericons.css' ) );
 
 	add_theme_support( 'automatic-feed-links' );
+	add_theme_support( 'title-tag' );
 
 	add_theme_support( 'post-thumbnails' );
 	// set_post_thumbnail_size( 672, 372, true );
@@ -253,30 +266,19 @@ function my_setup()
 		'search-form', 'comment-form', 'comment-list', 'gallery', 'caption'
 	) );
 
-	// add_theme_support( 'custom-background', apply_filters( 'my_custom_background_args', array(
-	// 	'default-color' => 'f5f5f5',
-	// ) ) );
-
-	// add_theme_support( 'featured-content', array(
-	// 	'featured_content_filter' => 'my_get_featured_posts',
-	// 	'max_posts' => 6,
-	// ) );
-
-	// add_filter( 'use_default_gallery_style', '__return_false' );
-
 	if( function_exists('acf_add_options_page') ) {
 		acf_add_options_page( array(
 			'page_title' 	=> 'Opções Gerais',
 			'menu_title'	=> 'Personalizar',
 			'menu_slug' 	=> 'acf-options',
 			'capability'	=> 'edit_posts',
-			'redirect'		=> false
+			'redirect'		=> true
 		) );
-		// acf_add_options_sub_page( array(
-		// 	'page_title' 	=> 'Página Inicial',
-		// 	'menu_title'	=> 'Página Inicial',
-		// 	'parent_slug'	=> 'acf-options',
-		// ) );
+		acf_add_options_sub_page( array(
+			'page_title' 	=> 'Página Inicial',
+			'menu_title'	=> 'Página Inicial',
+			'parent_slug'	=> 'acf-options',
+		) );
 		acf_add_options_sub_page( array(
 			'page_title' 	=> 'Redes Sociais',
 			'menu_title'	=> 'Redes Sociais',
@@ -324,17 +326,23 @@ function my_scripts()
 	wp_deregister_script( 'jquery' );
 	wp_register_script( 'jquery', 'http://code.jquery.com/jquery-1.11.0.min.js');
 	wp_enqueue_script( 'jquery' );
-	wp_enqueue_script( 'my-theme-js', get_template_directory_uri() . '/js/app.js', array( 'jquery' ), filemtime( TEMPLATEPATH . '/js/app.js' ), true );
 
 	if ( is_single() )
 	{
-		wp_register_script( 'my-view-count', get_template_directory_uri() . '/js/single.js', array( 'jquery' ), filemtime( TEMPLATEPATH . '/js/single.js' ), true );
-		wp_localize_script( 'my-view-count', 'myAjax', array(
-			'ajaxurl' => admin_url( 'admin-ajax.php' ),
-			'post_id' => $post->ID,
-			'nonce'   => wp_create_nonce( 'my_view_count_nonce' ),
-		) );
-		wp_enqueue_script( 'my-view-count' );
+		// Fancybox
+		wp_enqueue_style( 'fancybox-css', get_template_directory_uri() . '/js/fancybox/jquery.fancybox.css', array( 'my-theme-css' ), '2.1.5' );
+		wp_enqueue_script( 'fancybox-js', get_template_directory_uri() . '/js/fancybox/jquery.fancybox.pack.js', array( 'jquery' ), '2.1.5', true );
+		wp_enqueue_script( 'gmaps-api', 'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false', array( 'jquery' ), null, true );
+		wp_enqueue_script( 'gmaps-js', get_template_directory_uri() . '/js/gmaps.js', array( 'jquery', 'gmaps-api' ), filemtime( TEMPLATEPATH . '/js/gmaps.js' ), true );
+
+		// View Count
+		// wp_register_script( 'my-view-count', get_template_directory_uri() . '/js/single.js', array( 'jquery' ), filemtime( TEMPLATEPATH . '/js/single.js' ), true );
+		// wp_localize_script( 'my-view-count', 'myAjax', array(
+		// 	'ajaxurl' => admin_url( 'admin-ajax.php' ),
+		// 	'post_id' => $post->ID,
+		// 	'nonce'   => wp_create_nonce( 'my_view_count_nonce' ),
+		// ) );
+		// wp_enqueue_script( 'my-view-count' );
 	}
 	else if ( is_tax() )
 	{
@@ -348,6 +356,8 @@ function my_scripts()
 		) );
 		wp_enqueue_script( 'my-tax-count' );
 	}
+
+	wp_enqueue_script( 'my-theme-js', get_template_directory_uri() . '/js/app.js', array( 'jquery' ), filemtime( TEMPLATEPATH . '/js/app.js' ), true );
 
 }
 
@@ -580,7 +590,7 @@ function custom_post_type()
 		'description'         => __( 'Imóveis', 'imovelrj' ),
 		'labels'              => $labels,
 		'supports'            => array( 'title', 'thumbnail', 'revisions', ),
-		'taxonomies'          => array( 'tipo', 'bairro', 'post_tag' ),
+		'taxonomies'          => array( 'tipo', 'bairro' ),
 		'hierarchical'        => false,
 		'public'              => true,
 		'show_ui'             => true,

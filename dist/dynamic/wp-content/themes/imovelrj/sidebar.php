@@ -6,16 +6,18 @@
 		<?php
 		while(have_rows('vizinhas')) : the_row();
 		$post = get_sub_field('vizinha');
-		setup_postdata($post);
+		if ($post) :
+			setup_postdata($post);
 		?>
 		<li class="neighbor-item"><a href="<?php the_permalink(); ?>">
 			<?php the_post_thumbnail('my-small', array('class' => 'neighbor-image')) ?>
 			<h3 class="neighbor-title"><?php the_title() ?></h3>
-			<strong class="neighbor-value"><?php the_field('preco') ?></strong>
+			<strong class="neighbor-value"><?php my_price('preco') ?></strong>
 		</a></li>
 		<?php
-		wp_reset_postdata();
+		endif;
 		endwhile;
+		wp_reset_postdata();
 		?>
 	</ul>
 </aside>

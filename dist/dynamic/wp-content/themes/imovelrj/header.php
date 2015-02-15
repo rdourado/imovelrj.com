@@ -2,7 +2,6 @@
 <html <?php language_attributes(); ?>>
 	<head>
 		<meta charset="UTF-8">
-		<title>Imóvel RJ</title>
 		<meta content="width=device-width, initial-scale=1" name="viewport">
 		<?php wp_head() ?>
 	</head>

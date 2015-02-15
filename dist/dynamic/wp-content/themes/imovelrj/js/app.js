@@ -25,4 +25,9 @@
     $(this.hash).show().siblings().hide();
     return $(this).parent().addClass('active').siblings().removeClass('active');
   }).find('a:first').trigger('click.rj');
+  $('.fancy,a[href$=".gif"],a[href$=".jpg"],a[href$=".jpeg"],a[href$=".png"]').fancybox();
+  $('.gallery-view').off('click').on('click', function(e) {
+    e.preventDefault();
+    return $(this).next().trigger('click');
+  });
 })(jQuery);
