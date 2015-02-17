@@ -744,6 +744,7 @@ a
 .gallery
 	@extend .cf
 	margin-bottom: 24px
+	position: relative
 	img
 		display: block
 		height: auto
@@ -757,6 +758,24 @@ a
 	+col(2,8)
 	&:nth-child(n+6)
 		display: none
+#gallery-prev,
+#gallery-next
+	background: rgba(#fff,.8)
+	bottom: 35px
+	color: $green
+	cursor: pointer
+	display: block
+	font: 26px/35px sans-serif
+	height: 35px
+	position: absolute
+	text-align: center
+	width: 23px
+	&:hover
+		background: #fff
+#gallery-prev
+	left: gutter(8)
+#gallery-next
+	right: gutter(8)
 
 .entry-side
 	float: right
@@ -814,6 +833,9 @@ a
 	float: right
 	margin-bottom: 35px
 	+col(3)
+.yasr-total-average-text,
+#yasr-already-voted-text
+	display: none !important
 
 .entry-comments
 	border-top: 1px solid $green-light

@@ -9,11 +9,11 @@
 		<header class="head" role="banner">
 			<div class="wrap">
 				<div class="head-logo">
-<?php 				if (is_front_page()) : ?>
+					<?php if (is_front_page()) : ?>
 					<h1 class="logo">ImóvelRJ</h1>
-<?php 				else : ?>
+					<?php else : ?>
 					<div class="logo"><a href="<?php echo home_url('/') ?>">ImóvelRJ</a></div>
-<?php 				endif; ?>
+					<?php endif; ?>
 				</div>
 				<div class="head-navigation" id="nav" role="navigation">
 					<button class="head-toggle" type="button">
@@ -28,19 +28,19 @@
 				</div>
 				<div class="head-social">
 					<ul class="head-links">
-<?php 					if (get_field('facebook', 'option')) { ?>
+						<?php if (get_field('facebook', 'option')) { ?>
 						<li class="head-link facebook"><a href="<?php the_field('facebook', 'option') ?>" target="_blank"><i class="icon icon-facebook"></i></a></li>
-<?php 					} elseif (get_field('twitter', 'option')) { ?>
+						<?php } if (get_field('twitter', 'option')) { ?>
 						<li class="head-link twitter"><a href="<?php the_field('twitter', 'option') ?>" target="_blank"><i class="icon icon-twitter"></i></a></li>
-<?php 					} elseif (get_field('gplus', 'option')) { ?>
+						<?php } if (get_field('gplus', 'option')) { ?>
 						<li class="head-link gplus"><a href="<?php the_field('gplus', 'option') ?>" target="_blank"><i class="icon icon-gplus"></i></a></li>
-<?php 					} elseif (get_field('linkedin', 'option')) { ?>
+						<?php } if (get_field('linkedin', 'option')) { ?>
 						<li class="head-link linkedin"><a href="<?php the_field('linkedin', 'option') ?>" target="_blank"><i class="icon icon-linkedin"></i></a></li>
-<?php 					} elseif (get_field('youtube', 'option')) { ?>
+						<?php } if (get_field('youtube', 'option')) { ?>
 						<li class="head-link youtube"><a href="<?php the_field('youtube', 'option') ?>" target="_blank"><i class="icon icon-youtube"></i></a></li>
-<?php 					} elseif (get_field('instagram', 'option')) { ?>
+						<?php } if (get_field('instagram', 'option')) { ?>
 						<li class="head-link instagram"><a href="<?php the_field('instagram', 'option') ?>" target="_blank"><i class="icon icon-instagram"></i></a></li>
-<?php 					} ?>
+						<?php } ?>
 					</ul>
 				</div>
 				<?php get_search_form() ?>

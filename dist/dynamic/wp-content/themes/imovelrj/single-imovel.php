@@ -7,6 +7,12 @@
 							<h1 class="entry-title p-name"><?php the_title() ?></h1>
 							<p class="entry-category p-category"><?php my_tags(', ') ?></p>
 						</div>
+						<?php if (get_field('preco')) : ?>
+						<p class="entry-value p-summary">
+							Preço:
+							<strong><?php my_price('preco') ?></strong>
+						</p>
+						<?php endif; ?>
 						<ul class="entry-meta p-location h-adr">
 							<?php if (get_field('endereco')) { ?>
 							<li>Endereço:
@@ -140,6 +146,7 @@
 							</div>
 							<div class="entry-evaluate">
 								<h3 class="header">Avalie esse imóvel</h3>
+								<?php echo do_shortcode('[yasr_visitor_votes]'); ?>
 							</div>
 						</div>
 					</footer>

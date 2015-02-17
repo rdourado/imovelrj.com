@@ -339,7 +339,7 @@ function my_scripts()
 
 	// JSs
 	wp_deregister_script( 'jquery' );
-	wp_register_script( 'jquery', 'http://code.jquery.com/jquery-1.11.0.min.js', array(), '1.10.0', true );
+	wp_register_script( 'jquery', 'http://code.jquery.com/jquery-1.11.0.min.js', array(), '1.10.0', false );
 	wp_enqueue_script( 'jquery' );
 
 	if ( is_single() )

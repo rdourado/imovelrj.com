@@ -50,5 +50,30 @@
         .next()
         .trigger 'click'
 
+  # Gallery
+
+  thumbs = $ '.gallery-thumb'
+  if thumbs.length > 4
+    showThumbs = ->
+      thumbs
+        .hide()
+        .slice current, current + 4
+        .show()
+    current = 0
+    total = thumbs.length - 4
+    thumbs
+      .last()
+      .after '<button id="gallery-prev">‹</button><button id="gallery-next">›</button>'
+    $ '#gallery-prev'
+      .on 'click', (e) ->
+        do e.preventDefault
+        current-- if current > 0
+        do showThumbs
+    $ '#gallery-next'
+      .on 'click', (e) ->
+        do e.preventDefault
+        current++ if current < total
+        do showThumbs
+
   return
 ) jQuery
